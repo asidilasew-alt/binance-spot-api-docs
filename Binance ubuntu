@@ -1,0 +1,33 @@
+Format: 1.8
+Date: Mon, 03 Mar 2025 15:09:13 -0700
+Source: python-trezor
+Binary: python3-trezor trezor
+Built-For-Profiles: noudeb
+Architecture: all
+Version: 0.13.10-2
+Distribution: plucky-proposed
+Urgency: medium
+Maintainer: Launchpad Build Daemon <buildd@lcy02-amd64-040.buildd>
+Changed-By: Soren Stoutner <soren@debian.org>
+Description:
+ python3-trezor - library for communicating with TREZOR Bitcoin HW wallet (Python 3
+ trezor     - utilities for communicating with TREZOR Bitcoin HW wallet
+Changes:
+ python-trezor (0.13.10-2) unstable; urgency=medium
+ .
+   * Remove unneeded debian/source/options with extend-diff-ignore.
+   * debian/control:
+     - Add build-depends-indep on python3-shamir-mnemonic and python3-slip10.
+     - Bump standards-version to 4.7.2 (no changes needed).
+Checksums-Sha1:
+ a187a60e7b170b766654851631ee0a754d777f32 8425 python-trezor_0.13.10-2_amd64.buildinfo
+ cfd639b20719a9456a7e01b36f20f2ff5d393620 158110 python3-trezor_0.13.10-2_all.deb
+ 219ef776c0575cabeb7e773b510bd870abd8c541 5984 trezor_0.13.10-2_all.deb
+Checksums-Sha256:
+ 5e52ecd7a6fbdaf7f8a310151af681da3ad025d294848dd212c827898e376169 8425 python-trezor_0.13.10-2_amd64.buildinfo
+ 4d437474544fe624863c9a128d0c943f80e5f8dda5493f05ee211047a9ccbf87 158110 python3-trezor_0.13.10-2_all.deb
+ ac68c421b56dd5ed695b0ec3e32acec861f66c273b6e7ebecbb2d95970688322 5984 trezor_0.13.10-2_all.deb
+Files:
+ 2d05319b21cb0b1bf7bed8951a1bd0a2 8425 python optional python-trezor_0.13.10-2_amd64.buildinfo
+ ec7478a308a5b1de79b01398bfd54b27 158110 python optional python3-trezor_0.13.10-2_all.deb
+ bb93273ad2248889962e31379844746b 5984 utils optional trezor_0.13.10-2_all.deb
