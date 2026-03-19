@@ -18,6 +18,8 @@
 [sbe-market-data-streams_CN.md](./sbe-market-data-streams_CN.md)|SBE 市场数据流
 [user-data-stream_CN.md](./user-data-stream_CN.md)     | 现货用户数据流接口的描述
 [sbe_schemas](./sbe/schemas/) | 现货API的简单二进制编码 (SBE)模式 (Schema)
+[testnet](./testnet) | 仅在现货测试网中可用的 API 文档
+[demo-mode](./demo-mode) | 关于模拟交易的描述
 &#x0020; |
 [Margin Trading](https://developers.binance.com/docs/zh-CN/margin_trading/Introduction) | 关于杠杆交易的描述
 [Derivative UM Futures](https://developers.binance.com/docs/zh-CN/derivatives/usds-margined-futures/general-info) | 关于U本位合约相关接口的描述 (`/fapi`)
@@ -61,6 +63,7 @@
 [pegged_orders](./faqs/pegged_orders_CN.md) |  关于挂钩订单的详细信息
 [order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新
 [sbe_faq_CN](./faqs/sbe_faq_CN.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
+[price_range_execution_rules_CN](./faqs/price_range_execution_rules_CN.md)| 价格区间执行规则
 
 ### 更新日志
 

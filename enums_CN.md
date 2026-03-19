@@ -133,34 +133,34 @@
 * REQUESTS_WEIGHT - 单位时间请求权重之和上限
 
 ```json
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000
-    }
+{
+    "rateLimitType": "REQUEST_WEIGHT",
+    "interval": "MINUTE",
+    "intervalNum": 1,
+    "limit": 6000
+}
 ```
 
-* ORDERS - 单位时间下单(撤单)次数上限
+* ORDERS - 单位时间下单次数上限
 
 ```json
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 1,
-      "limit": 10
-    }
+{
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 1,
+    "limit": 10
+}
 ```
 
 * RAW_REQUESTS - 单位时间请求次数上限
 
 ```json
-    {
-      "rateLimitType": "RAW_REQUESTS",
-      "interval": "MINUTE",
-      "intervalNum": 5,
-      "limit": 61000
-    }
+{
+    "rateLimitType": "RAW_REQUESTS",
+    "interval": "MINUTE",
+    "intervalNum": 5,
+    "limit": 61000
+}
 ```
 
 ## 速率限制间隔 （interval）
@@ -181,3 +181,21 @@
 * `EXPIRE_BOTH`
 * `DECREMENT`
 * `TRANSFER`
+
+## 可能的执行类型:
+
+状态 |描述
+-----------|--------------
+`NEW`      | 新订单已被引擎接受。
+`CANCELED` | 订单被用户取消。
+`REPLACED` | 订单已被修改。
+`REJECTED` | 新订单被拒绝 （e.g. 在撤消挂单再下单时，其中新订单被拒绝但撤消挂单请求成功）。
+`TRADE`    | 订单有新成交。
+`EXPIRED`  | 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
+`TRADE_PREVENTION` | 订单因 STP 触发而过期。
+
+<a id="execution rules"></a>
+
+## 执行规则
+
+* `PRICE_RANGE`

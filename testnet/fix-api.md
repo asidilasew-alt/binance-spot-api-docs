@@ -84,24 +84,51 @@
   * This does not always mean that the request failed in the Matching Engine.
   * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 * If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* To ensure uninterrupted connectivity, please make sure that your client sends **SNI (Server Name Indication)** during the TLS handshake and performs certificate validation against the intended hostname. <br>
+Clients that do not send SNI may receive an unexpected certificate, which can result in TLS handshake or hostname verification failures.
+
+<details>
+<summary>Example implementations</summary>
+
+### NodeJS
+If you are using Node.js and connecting via raw TLS sockets (`tls.connect()`), you must explicitly set the servername option. Please refer to the sample below:
+
+```javascript
+  const tls = require("tls");
+  const hostname = "fix-dc.binance.com"; //EXAMPLE
+
+  const options = {
+     host: hostname,
+     port: 9002,
+     servername: hostname                // enables SNI
+   };
+```
+
+Note that: NodeJS doesn't enable SNI by default for TLS (See [https://nodejs.org/api/tls.html#tlsconnectoptions-callback](https://nodejs.org/api/tls.html#tlsconnectoptions-callback)). <br>
+If you are using standard HTTPS libraries in Node.js (e.g., `https.request()`, `axios`, `fetch`), these typically set SNI automatically when connecting via a hostname/URL.
+
+### Other languages/custom TLS implementations
+When using custom TLS agents / TLS APIs, ensure you set the equivalent field (often named `server_hostname`, `hostname`, or `ServerName`) to the endpoint hostname so SNI is sent.
+</details>
 
 **FIX sessions only support Ed25519 keys.** </br>
 You can setup and configure your API key permissions on [Spot Test Network](https://testnet.binance.vision/).
 
 ### FIX API Order Entry sessions
 
-- Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
-- Supports placing orders, canceling orders, and querying current limit usage.
-- Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
-- Only API keys with `FIX_API` are allowed to connect.
-- QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+* Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
+* Supports placing orders, canceling orders, and querying current limit usage.
+* Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+* Only API keys with `FIX_API` are allowed to connect.
+* QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### FIX API Drop Copy sessions
 
-- Endpoint is: `tcp+tls://fix-dc.testnet.binance.vision:9000`
-- Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
-- Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
-- QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+* Endpoint is: `tcp+tls://fix-dc.testnet.binance.vision:9000`
+* Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+* Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
+* QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+* Data in Drop Copy sessions is delayed by 1 second.
 
 ### FIX API Market Data sessions
 
@@ -742,6 +769,7 @@ Sent by the server whenever an order state changes.
 |835 | PegMoveType | CHAR | N | Describes whether peg is fixed or floats. Required for Pegged Orders and must be set to `1` (FIXED) |
 |836 | PegOffsetType | CHAR | N | Type of price peg offset. <br> Possible values: <br></br> `3`  - PRICE_TIER|
 |839 | PeggedPrice  | PRICE  | N |  Current price the order is pegged at|
+| 25056| ExpiryReason | STRING | N| Cause of the order’s expiration |
 
 **Sample message:**
 
@@ -1157,7 +1185,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
 #### InstrumentListRequest `<x>`
 
-Sent by the client to query information about active instruments (i.e., those that have the TRADING status). If used for an inactive instrument, it will be responded to with a [Reject`<3>`](#reject).
+Sent by the client to query information about instruments.
 
 | Tag | Name                      | Type   | Required | Description                                                                        |
 |-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|
@@ -1490,6 +1518,9 @@ General:
     * Optional fields that are not present must be set to the corresponding `nullValue`
         * The encoders generated by `SbeTool` handle this correctly
         * Please refer to the definition of `nullValue` in the [SBE specification](https://www.fixtrading.org/standards/sbe-online/) if encoding payloads manually
+
+Decimal encoding:
+* In request messages, the values for `PriceExponent` and `QtyExponent` must be no more precise than the precision of the symbol being transacted. Symbol precision can be retrieved from the `InstrumentList` response.
 
 **Logon** message:
 * The `SenderCompID`, `TargetCompID` and `RecvWindow` fields are provided in the `Logon` FIX SBE message instead of the message header

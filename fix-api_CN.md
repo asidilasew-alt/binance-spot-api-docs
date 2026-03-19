@@ -11,6 +11,30 @@
   * 这并不总是意味着该请求在撮合引擎中失败。
   * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 * 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 为确保连接不中断，请确保您的客户端在 TLS 握手过程中发送 **SNI（服务器名称指示）**，并对目标主机名进行证书验证。
+* 未发送 SNI 的客户端可能会收到证书错误的消息，导致 TLS 握手或主机名验证失败。
+
+<details>
+<summary>示例实现</summary>
+
+```javascript
+  const tls = require("tls");
+  const hostname = "fix-dc.binance.com"; //示例
+
+  const options = {
+     host: hostname,
+     port: 9002,
+     servername: hostname                // 启用 SNI
+   };
+```
+
+注意：NodeJS 默认不启用 TLS 的 SNI（详见 [https://nodejs.org/api/tls.html#tlsconnectoptions-callback](https://nodejs.org/api/tls.html#tlsconnectoptions-callback)）。
+如果您使用 Node.js 中的标准 HTTPS 库（例如 `https.request()`、`axios`、`fetch`），通常在通过主机名/URL 连接时会自动设置 SNI。
+
+### 其他语言/自定义 TLS 实现
+使用自定义 TLS 代理或 TLS API 时，请确保将相应字段（通常名为 `server_hostname`、`hostname` 或 `ServerName`）设置为目标主机名，以便发送 SNI。
+
+</details>
 
 **FIX 会话仅支持 Ed25519 密钥。**
 
@@ -18,18 +42,20 @@
 
 ### FIX API 订单接入会话
 
-- 端点为：`tcp+tls：//fix-oe.binance.com：9000`
-- 支持下单，取消订单和查询当前限制使用情况。
-- 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
-- 仅允许带有 `FIX_API` 的 API Key 连接。
-- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+* 端点为：`tcp+tls：//fix-oe.binance.com：9000`
+* 支持下单，取消订单和查询当前限制使用情况。
+* 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
+* 仅允许带有 `FIX_API` 的 API Key 连接。
+* 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
+<a id="fix-api-drop-copy-sessions"></a>
 ### FIX API Drop Copy 会话
 
-- 端点为：`tcp+tls://fix-dc.binance.com:9000`
-- 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
-- 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
-- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+* 端点为：`tcp+tls://fix-dc.binance.com:9000`
+* 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
+* 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
+* 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+* Drop Copy 会话中的数据存在 1 秒的延迟。
 
 ### FIX API Market Data 会话
 
@@ -673,6 +699,7 @@ Your connection is about to be closed. Please reconnect.
 | 835   | PegMoveType              | CHAR    | N        | 描述挂钩是固定的还是浮动的。挂钩订单必用且必须为 `1` (FIXED) |
 | 836   | PegOffsetType            | CHAR    | N        | 定义了挂钩价格偏移类型。 <br> 可能的值: <br></br> `3`  - PRICE_TIER|
 | 839   | PeggedPrice              | PRICE   | N        | 订单所挂钩的当前价格|
+| 25056 | ExpiryReason             | STRING  | N        | 订单过期的原因 |
 
 **示例消息:**
 
@@ -1085,7 +1112,7 @@ Your connection is about to be closed. Please reconnect.
 
 #### InstrumentListRequest<code>&lt;x&gt;</code>
 
-由客户端发送以查询有关有效的交易对（即具有处于可交易的交易对）的信息。如果用于未激活的交易对，将以[REJECT`<3>`](#reject)进行响应。
+由客户端发送，用于查询有关交易对的信息。
 
 | Tag | Name                      | Type   | Required | Description                                                                        |
 |-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|
@@ -1429,6 +1456,10 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
     * 未设置的可选字段必须设置为相应的 `nullValue`
         * `SbeTool` 生成的编码器可以正确处理这种情况
         * 如果 payload 是手动编码生成的，请参阅 [SBE 规范](https://www.fixtrading.org/standards/sbe-online/) 中有关 `nullValue` 的定义
+
+
+小数位编码：
+* 在请求消息中，`PriceExponent` 和 `QtyExponent` 的值不得超过其所处理的交易对精度。交易对的精度可以从 `InstrumentList` 响应中获取。
 
 **Logon（登录）消息：**
 * `SenderCompID`、`TargetCompID` 和 `RecvWindow` 字段包含在 `Logon` FIX SBE 消息中，而不是消息头

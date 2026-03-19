@@ -46,8 +46,8 @@
 
 ```javascript
 {
-  "code": -1121,
-  "msg": "Invalid symbol."
+    "code": -1121,
+    "msg": "Invalid symbol."
 }
 ```
 
@@ -687,7 +687,7 @@ NONE
 
 ```javascript
 {
-  "serverTime": 1499827319559
+    "serverTime": 1499827319559
 }
 ```
 
@@ -736,84 +736,124 @@ symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效
 
 ```javascript
 {
-  "timezone": "UTC",
-  "serverTime": 1508631584636,
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUESTS_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 1200 // 每分钟调用的所有接口权重之和不得超过1200
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 1,
-      "limit": 10 // 每秒钟所有订单/撤单次数不得超过10
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 100000 // 每天订单/撤单不得超过10万
-    },
-    {
-      "rateLimitType": "RAW_REQUESTS",
-      "interval": "MINUTE",
-      "intervalNum": 5,
-      "limit": 5000 // 每5分钟调用订单次数不得超过5000
-    }
-  ],
-  "exchangeFilters": [],
-  "symbols": [
-    {
-      "symbol": "ETHBTC",
-      "status": "TRADING",
-      "baseAsset": "ETH",
-      "baseAssetPrecision": 8,
-      "quoteAsset": "BTC",
-      "quotePrecision": 8,
-      "quoteAssetPrecision": 8,
-      "orderTypes": ["LIMIT", "MARKET"],
-      "icebergAllowed": false,
-      "ocoAllowed": true,
-      "otoAllowed": true,
-      "opoAllowed": true,
-      "quoteOrderQtyMarketAllowed": true,
-      "allowTrailingStop": false,
-      "cancelReplaceAllowed": false,
-      "amendAllowed":false,
-      "pegInstructionsAllowed": true,
-      "isSpotTradingAllowed": true,
-      "isMarginTradingAllowed": true,
-      "filters": [
-          // 这些在“过滤器”部分定义。
-          // 所有过滤器均为可选
-      ],
-      "permissions": [],
-      "permissionSets": [
-        [
-          "SPOT",
-          "MARGIN"
-        ]
-      ],
-      "defaultSelfTradePreventionMode": "NONE",
-      "allowedSelfTradePreventionModes": [
-        "NONE"
-      ]
-    }
-  ],
-  // 可选字段，仅当 SOR 可用时才会被显示出来。
-  // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq_CN.md
-  "sors": [
-    {
-      "baseAsset": "BTC",
-      "symbols": [
-        "BTCUSDT",
-        "BTCUSDC"
-      ]
-    }
-  ]
+    "timezone": "UTC",
+    "serverTime": 1508631584636,
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUESTS_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 1200       // 每分钟调用的所有接口权重之和不得超过1200
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 1,
+            "limit": 10         // 每秒钟所有订单/撤单次数不得超过10
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 100000     // 每天订单/撤单不得超过10万
+        },
+        {
+            "rateLimitType": "RAW_REQUESTS",
+            "interval": "MINUTE",
+            "intervalNum": 5,
+            "limit": 5000       // 每5分钟调用订单次数不得超过5000
+        }
+    ],
+    "exchangeFilters": [],
+    "symbols": [
+        {
+            "symbol": "ETHBTC",
+            "status": "TRADING",
+            "baseAsset": "ETH",
+            "baseAssetPrecision": 8,
+            "quoteAsset": "BTC",
+            "quotePrecision": 8,
+            "quoteAssetPrecision": 8,
+            "baseCommissionPrecision": 8,
+            "quoteCommissionPrecision": 8,
+            "orderTypes": ["LIMIT", "MARKET"],
+            "icebergAllowed": false,
+            "ocoAllowed": true,
+            "otoAllowed": true,
+            "opoAllowed": true,
+            "quoteOrderQtyMarketAllowed": true,
+            "allowTrailingStop": false,
+            "cancelReplaceAllowed": false,
+            "amendAllowed": false,
+            "pegInstructionsAllowed": true,
+            "isSpotTradingAllowed": true,
+            "isMarginTradingAllowed": true,
+            "filters": [
+                // 这些在“过滤器”部分定义。
+                // 所有过滤器均为可选
+            ],
+            "permissions": [],
+            "permissionSets": [["SPOT", "MARGIN"]],
+            "defaultSelfTradePreventionMode": "NONE",
+            "allowedSelfTradePreventionModes": ["NONE"]
+        }
+    ],
+    // 可选字段，仅当 SOR 可用时才会被显示出来。
+    // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq_CN.md
+    "sors": [
+        {
+            "baseAsset": "BTC",
+            "symbols": ["BTCUSDT", "BTCUSDC"]
+        }
+    ]
+}
+```
+
+### 查询执行规则
+
+```
+GET /api/v3/executionRules
+```
+
+**权重:**
+
+限制 | 权重
+------------ | ------------
+`symbol`  | 2
+`symbols` | 权重为 2，最多支持 40|
+`symbolStatus` |40|
+None            |40|
+
+**参数:**
+
+名称 | 类型 | 是否必须 | 描述
+------------ | ------------ | ------------ | ------------
+`symbol`   | STRING| No      | 查询指定的交易对
+`symbols`  | STRING | No     | 查询多个交易对
+`symbolStatus` |ENUM| 查询指定状态的所有交易对<br>支持的值：`TRADING`（正常交易中）、`HALT`（交易终止）、BREAK（交易暂停)
+
+**注意：** 不允许多个参数组合使用。
+
+**数据源：** 缓存
+
+**响应：**
+
+```javascript
+{
+    "symbolRules": [
+        {
+            "symbol": "BAZUSD",
+            "rules": [
+                {
+                    "ruleType": "PRICE_RANGE",
+                    "bidLimitMultUp": "1.0001",
+                    "bidLimitMultDown": "0.9999",
+                    "askLimitMultUp": "1.0001",
+                    "askLimitMultDown": "0.9999"
+                }
+            ]
+        }
+    ]
 }
 ```
 
@@ -841,7 +881,7 @@ GET /api/v3/depth
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 limit | INT | NO | 默认： 100; 最大： 5000。 <br/> 如果 limit > 5000, 最多返回5000条数据。
-`symbolStatus`|ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。<br/>如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`<br/>有效值： `TRADING`, `HALT`, `BREAK`
+symbolStatus|ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。<br/>如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`<br/>有效值： `TRADING`, `HALT`, `BREAK`
 
 **数据源:**
 缓存
@@ -850,21 +890,14 @@ limit | INT | NO | 默认： 100; 最大： 5000。 <br/> 如果 limit > 5000, �
 
 ```javascript
 {
-  "lastUpdateId": 1027024,
-  "bids": [
-    [
-      "4.00000000",     // 价位
-      "431.00000000",   // 挂单量
-      []                // 请忽略.
-    ]
-  ],
-  "asks": [
-    [
-      "4.00000200",
-      "12.00000000",
-      []
-    ]
-  ]
+    "lastUpdateId": 1027024,
+    "bids": [
+        [
+            "4.00000000",      // 价位
+            "431.00000000"     // 挂单量
+        ]
+    ],
+    "asks": [["4.00000200", "12.00000000"]]
 }
 ```
 
@@ -893,15 +926,15 @@ limit | INT | NO | 默认值： 500； 最大值： 1000。
 
 ```javascript
 [
-  {
-    "id": 28457,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "quoteQty": "48.000012",
-    "time": 1499865549590,
-    "isBuyerMaker": true,
-    "isBestMatch": true
-  }
+    {
+        "id": 28457,
+        "price": "4.00000100",
+        "qty": "12.00000000",
+        "quoteQty": "48.000012",
+        "time": 1499865549590,
+        "isBuyerMaker": true,
+        "isBestMatch": true
+    }
 ]
 ```
 
@@ -932,15 +965,15 @@ fromId | LONG | NO | 从哪一条成交id开始返回，缺省返回最近的成
 
 ```javascript
 [
-  {
-    "id": 28457,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "quoteQty": "48.000012",
-    "time": 1499865549590,
-    "isBuyerMaker": true,
-    "isBestMatch": true
-  }
+    {
+        "id": 28457,
+        "price": "4.00000100",
+        "qty": "12.00000000",
+        "quoteQty": "48.000012",
+        "time": 1499865549590,
+        "isBuyerMaker": true,
+        "isBestMatch": true
+    }
 ]
 ```
 
@@ -974,16 +1007,16 @@ limit | INT | NO | 默认值： 500； 最大值： 1000。
 
 ```javascript
 [
-  {
-    "a": 26129,         // 归集成交ID
-    "p": "0.01633102",  // 成交价
-    "q": "4.70443515",  // 成交量
-    "f": 27781,         // 被归集的首个成交ID
-    "l": 27781,         // 被归集的末个成交ID
-    "T": 1498793709153, // 成交时间
-    "m": true,          // 是否为主动卖出单
-    "M": true           // 是否为最优撮合单(可忽略，目前总为最优撮合)
-  }
+    {
+        "a": 26129,             // 归集成交ID
+        "p": "0.01633102",      // 成交价
+        "q": "4.70443515",      // 成交量
+        "f": 27781,             // 被归集的首个成交ID
+        "l": 27781,             // 被归集的末个成交ID
+        "T": 1498793709153,     // 成交时间
+        "m": true,              // 是否为主动卖出单
+        "M": true               // 是否为最优撮合单(可忽略，目前总为最优撮合)
+    }
 ]
 ```
 
@@ -1041,20 +1074,20 @@ months -> 月  | `1M`
 
 ```javascript
 [
-  [
-    1499040000000,      // 开盘时间
-    "0.01634790",       // 开盘价
-    "0.80000000",       // 最高价
-    "0.01575800",       // 最低价
-    "0.01577100",       // 收盘价(当前K线未结束的即为最新价)
-    "148976.11427815",  // 成交量
-    1499644799999,      // 收盘时间
-    "2434.19055334",    // 成交额
-    308,                // 成交笔数
-    "1756.87402397",    // 主动买入成交量
-    "28.46694368",      // 主动买入成交额
-    "17928899.62484339" // 请忽略该参数
-  ]
+    [
+        1499040000000,          // 开盘时间
+        "0.01634790",           // 开盘价
+        "0.80000000",           // 最高价
+        "0.01575800",           // 最低价
+        "0.01577100",           // 收盘价(当前K线未结束的即为最新价)
+        "148976.11427815",      // 成交量
+        1499644799999,          // 收盘时间
+        "2434.19055334",        // 成交额
+        308,                    // 成交笔数
+        "1756.87402397",        // 主动买入成交量
+        "28.46694368",          // 主动买入成交额
+        "17928899.62484339"     // 请忽略该参数
+    ]
 ]
 ```
 
@@ -1098,20 +1131,20 @@ limit     | INT    | NO           | 默认值： 500； 最大值： 1000。
 
 ```javascript
 [
-  [
-    1499040000000,      // k线开盘时间
-    "0.01634790",       // 开盘价
-    "0.80000000",       // 最高价
-    "0.01575800",       // 最低价
-    "0.01577100",       // 收盘价(当前K线未结束的即为最新价)
-    "148976.11427815",  // 成交量
-    1499644799999,      // k线收盘时间
-    "2434.19055334",    // 成交额
-    308,                // 成交笔数
-    "1756.87402397",    // 主动买入成交量
-    "28.46694368",      // 主动买入成交额
-    "0"                 // 请忽略该参数
-  ]
+    [
+        1499040000000,         // k线开盘时间
+        "0.01634790",          // 开盘价
+        "0.80000000",          // 最高价
+        "0.01575800",          // 最低价
+        "0.01577100",          // 收盘价(当前K线未结束的即为最新价)
+        "148976.11427815",     // 成交量
+        1499644799999,         // k线收盘时间
+        "2434.19055334",       // 成交额
+        308,                   // 成交笔数
+        "1756.87402397",       // 主动买入成交量
+        "28.46694368",         // 主动买入成交额
+        "0"                    // 请忽略该参数
+    ]
 ]
 ```
 
@@ -1138,9 +1171,9 @@ symbol | STRING | YES |
 
 ```javascript
 {
-  "mins": 5,
-  "price": "9.35751834",
-  "closeTime": 1694061154503
+    "mins": 5,
+    "price": "9.35751834",
+    "closeTime": 1694061154503
 }
 ```
 
@@ -1242,33 +1275,6 @@ GET /api/v3/ticker/24hr
 
 ```javascript
 {
-  "symbol": "BNBBTC",
-  "priceChange": "-94.99999800",
-  "priceChangePercent": "-95.960",
-  "weightedAvgPrice": "0.29628482",
-  "prevClosePrice": "0.10002000",
-  "lastPrice": "4.00000200",
-  "lastQty": "200.00000000",
-  "bidPrice": "4.00000000",
-  "bidQty": "100.00000000",
-  "askPrice": "4.00000200",
-  "askQty": "100.00000000",
-  "openPrice": "99.00000000",
-  "highPrice": "100.00000000",
-  "lowPrice": "0.10000000",
-  "volume": "8913.30000000",
-  "quoteVolume": "15.30000000",
-  "openTime": 1499783499040,
-  "closeTime": 1499869899040,
-  "firstId": 28385,   // 首笔成交id
-  "lastId": 28460,    // 末笔成交id
-  "count": 76         // 成交笔数
-}
-```
-OR
-```javascript
-[
-  {
     "symbol": "BNBBTC",
     "priceChange": "-94.99999800",
     "priceChangePercent": "-95.960",
@@ -1287,10 +1293,37 @@ OR
     "quoteVolume": "15.30000000",
     "openTime": 1499783499040,
     "closeTime": 1499869899040,
-  "firstId": 28385,   // 首笔成交id
-  "lastId": 28460,    // 末笔成交id
-  "count": 76         // 成交笔数
-  }
+    "firstId": 28385,     // 首笔成交id
+    "lastId": 28460,      // 末笔成交id
+    "count": 76           // 成交笔数
+}
+```
+OR
+```javascript
+[
+    {
+        "symbol": "BNBBTC",
+        "priceChange": "-94.99999800",
+        "priceChangePercent": "-95.960",
+        "weightedAvgPrice": "0.29628482",
+        "prevClosePrice": "0.10002000",
+        "lastPrice": "4.00000200",
+        "lastQty": "200.00000000",
+        "bidPrice": "4.00000000",
+        "bidQty": "100.00000000",
+        "askPrice": "4.00000200",
+        "askQty": "100.00000000",
+        "openPrice": "99.00000000",
+        "highPrice": "100.00000000",
+        "lowPrice": "0.10000000",
+        "volume": "8913.30000000",
+        "quoteVolume": "15.30000000",
+        "openTime": 1499783499040,
+        "closeTime": 1499869899040,
+        "firstId": 28385,     // 首笔成交id
+        "lastId": 28460,      // 末笔成交id
+        "count": 76           // 成交笔数
+    }
 ]
 ```
 
@@ -1299,18 +1332,18 @@ OR
 
 ```javascript
 {
-  "symbol":      "BNBBTC",          // 交易对
-  "openPrice":   "99.00000000",     // 间隔开盘价
-  "highPrice":   "100.00000000",    // 间隔最高价
-  "lowPrice":    "0.10000000",      // 间隔最低价
-  "lastPrice":   "4.00000200",      // 间隔收盘价
-  "volume":      "8913.30000000",   // 总交易量 (base asset)
-  "quoteVolume": "15.30000000",     // 总交易量 (quote asset)
-  "openTime":    1499783499040,     // ticker间隔的开始时间
-  "closeTime":   1499869899040,     // ticker间隔的结束时间
-  "firstId":     28385,             // 统计时间内的第一笔trade id
-  "lastId":      28460,             // 统计时间内的最后一笔trade id
-  "count":       76                 // 统计时间内交易笔数
+    "symbol": "BNBBTC",               // 交易对
+    "openPrice": "99.00000000",       // 间隔开盘价
+    "highPrice": "100.00000000",      // 间隔最高价
+    "lowPrice": "0.10000000",         // 间隔最低价
+    "lastPrice": "4.00000200",        // 间隔收盘价
+    "volume": "8913.30000000",        // 总交易量 (base asset)
+    "quoteVolume": "15.30000000",     // 总交易量 (quote asset)
+    "openTime": 1499783499040,        // ticker间隔的开始时间
+    "closeTime": 1499869899040,       // ticker间隔的结束时间
+    "firstId": 28385,                 // 统计时间内的第一笔trade id
+    "lastId": 28460,                  // 统计时间内的最后一笔trade id
+    "count": 76                       // 统计时间内交易笔数
 }
 ```
 
@@ -1318,34 +1351,34 @@ OR
 
 ```javascript
 [
-  {
-    "symbol": "BNBBTC",
-    "openPrice": "99.00000000",
-    "highPrice": "100.00000000",
-    "lowPrice": "0.10000000",
-    "lastPrice": "4.00000200",
-    "volume": "8913.30000000",
-    "quoteVolume": "15.30000000",
-    "openTime": 1499783499040,
-    "closeTime": 1499869899040,
-    "firstId": 28385,
-    "lastId": 28460,
-    "count": 76
-  },
-  {
-    "symbol": "LTCBTC",
-    "openPrice": "0.07000000",
-    "highPrice": "0.07000000",
-    "lowPrice": "0.07000000",
-    "lastPrice": "0.07000000",
-    "volume": "11.00000000",
-    "quoteVolume": "0.77000000",
-    "openTime": 1656908192899,
-    "closeTime": 1656994592899,
-    "firstId": 0,
-    "lastId": 10,
-    "count": 11
-  }
+    {
+        "symbol": "BNBBTC",
+        "openPrice": "99.00000000",
+        "highPrice": "100.00000000",
+        "lowPrice": "0.10000000",
+        "lastPrice": "4.00000200",
+        "volume": "8913.30000000",
+        "quoteVolume": "15.30000000",
+        "openTime": 1499783499040,
+        "closeTime": 1499869899040,
+        "firstId": 28385,
+        "lastId": 28460,
+        "count": 76
+    },
+    {
+        "symbol": "LTCBTC",
+        "openPrice": "0.07000000",
+        "highPrice": "0.07000000",
+        "lowPrice": "0.07000000",
+        "lastPrice": "0.07000000",
+        "volume": "11.00000000",
+        "quoteVolume": "0.77000000",
+        "openTime": 1656908192899,
+        "closeTime": 1656994592899,
+        "firstId": 0,
+        "lastId": 10,
+        "count": 11
+    }
 ]
 ```
 
@@ -1415,63 +1448,62 @@ GET /api/v3/ticker/tradingDay
 
 ```javascript
 {
-  "symbol":             "BTCUSDT",
-  "priceChange":        "-83.13000000",         // 绝对价格变动
-  "priceChangePercent": "-0.317",               // 相对价格变动百分比
-  "weightedAvgPrice":   "26234.58803036",       // 报价成交量 / 成交量
-  "openPrice":          "26304.80000000",
-  "highPrice":          "26397.46000000",
-  "lowPrice":           "26088.34000000",
-  "lastPrice":          "26221.67000000",
-  "volume":             "18495.35066000",       // 基础资产的成交量
-  "quoteVolume":        "485217905.04210480",   // 报价资产的成交量
-  "openTime":           1695686400000,
-  "closeTime":          1695772799999,
-  "firstId":            3220151555,             // 区间内的第一个交易的交易ID
-  "lastId":             3220849281,             // 区间内的最后一个交易的交易ID
-  "count":              697727                  // 区间内的交易数量
+    "symbol": "BTCUSDT",
+    "priceChange": "-83.13000000",            // 绝对价格变动
+    "priceChangePercent": "-0.317",           // 相对价格变动百分比
+    "weightedAvgPrice": "26234.58803036",     // 报价成交量 / 成交量
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",               // 基础资产的成交量
+    "quoteVolume": "485217905.04210480",      // 报价资产的成交量
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,                    // 区间内的第一个交易的交易ID
+    "lastId": 3220849281,                     // 区间内的最后一个交易的交易ID
+    "count": 697727                           // 区间内的交易数量
 }
-
 ```
 
 有 `symbols`:
 
 ```javascript
 [
-  {
-    "symbol": "BTCUSDT",
-    "priceChange": "-83.13000000",
-    "priceChangePercent": "-0.317",
-    "weightedAvgPrice": "26234.58803036",
-    "openPrice": "26304.80000000",
-    "highPrice": "26397.46000000",
-    "lowPrice": "26088.34000000",
-    "lastPrice": "26221.67000000",
-    "volume": "18495.35066000",
-    "quoteVolume": "485217905.04210480",
-    "openTime": 1695686400000,
-    "closeTime": 1695772799999,
-    "firstId": 3220151555,
-    "lastId": 3220849281,
-    "count": 697727
-  },
-  {
-    "symbol": "BNBUSDT",
-    "priceChange": "2.60000000",
-    "priceChangePercent": "1.238",
-    "weightedAvgPrice": "211.92276958",
-    "openPrice": "210.00000000",
-    "highPrice": "213.70000000",
-    "lowPrice": "209.70000000",
-    "lastPrice": "212.60000000",
-    "volume": "280709.58900000",
-    "quoteVolume": "59488753.54750000",
-    "openTime": 1695686400000,
-    "closeTime": 1695772799999,
-    "firstId": 672397461,
-    "lastId": 672496158,
-    "count": 98698
-  }
+    {
+        "symbol": "BTCUSDT",
+        "priceChange": "-83.13000000",
+        "priceChangePercent": "-0.317",
+        "weightedAvgPrice": "26234.58803036",
+        "openPrice": "26304.80000000",
+        "highPrice": "26397.46000000",
+        "lowPrice": "26088.34000000",
+        "lastPrice": "26221.67000000",
+        "volume": "18495.35066000",
+        "quoteVolume": "485217905.04210480",
+        "openTime": 1695686400000,
+        "closeTime": 1695772799999,
+        "firstId": 3220151555,
+        "lastId": 3220849281,
+        "count": 697727
+    },
+    {
+        "symbol": "BNBUSDT",
+        "priceChange": "2.60000000",
+        "priceChangePercent": "1.238",
+        "weightedAvgPrice": "211.92276958",
+        "openPrice": "210.00000000",
+        "highPrice": "213.70000000",
+        "lowPrice": "209.70000000",
+        "lastPrice": "212.60000000",
+        "volume": "280709.58900000",
+        "quoteVolume": "59488753.54750000",
+        "openTime": 1695686400000,
+        "closeTime": 1695772799999,
+        "firstId": 672397461,
+        "lastId": 672496158,
+        "count": 98698
+    }
 ]
 ```
 
@@ -1481,18 +1513,18 @@ GET /api/v3/ticker/tradingDay
 
 ```javascript
 {
-  "symbol":         "BTCUSDT",
-  "openPrice":      "26304.80000000",
-  "highPrice":      "26397.46000000",
-  "lowPrice":       "26088.34000000",
-  "lastPrice":      "26221.67000000",
-  "volume":         "18495.35066000",       // 基础资产的成交量
-  "quoteVolume":    "485217905.04210480",   // 报价资产的成交量
-  "openTime":       1695686400000,
-  "closeTime":      1695772799999,
-  "firstId":        3220151555,             // 区间内的第一个交易的交易ID
-  "lastId":         3220849281,             // 区间内的最后一个交易的交易ID
-  "count":          697727                  // 区间内的交易数量
+    "symbol": "BTCUSDT",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",              // 基础资产的成交量
+    "quoteVolume": "485217905.04210480",     // 报价资产的成交量
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,                   // 区间内的第一个交易的交易ID
+    "lastId": 3220849281,                    // 区间内的最后一个交易的交易ID
+    "count": 697727                          // 区间内的交易数量
 }
 ```
 
@@ -1500,34 +1532,34 @@ GET /api/v3/ticker/tradingDay
 
 ```javascript
 [
-  {
-    "symbol": "BTCUSDT",
-    "openPrice": "26304.80000000",
-    "highPrice": "26397.46000000",
-    "lowPrice": "26088.34000000",
-    "lastPrice": "26221.67000000",
-    "volume": "18495.35066000",
-    "quoteVolume": "485217905.04210480",
-    "openTime": 1695686400000,
-    "closeTime": 1695772799999,
-    "firstId": 3220151555,
-    "lastId": 3220849281,
-    "count": 697727
-  },
-  {
-    "symbol": "BNBUSDT",
-    "openPrice": "210.00000000",
-    "highPrice": "213.70000000",
-    "lowPrice": "209.70000000",
-    "lastPrice": "212.60000000",
-    "volume": "280709.58900000",
-    "quoteVolume": "59488753.54750000",
-    "openTime": 1695686400000,
-    "closeTime": 1695772799999,
-    "firstId": 672397461,
-    "lastId": 672496158,
-    "count": 98698
-  }
+    {
+        "symbol": "BTCUSDT",
+        "openPrice": "26304.80000000",
+        "highPrice": "26397.46000000",
+        "lowPrice": "26088.34000000",
+        "lastPrice": "26221.67000000",
+        "volume": "18495.35066000",
+        "quoteVolume": "485217905.04210480",
+        "openTime": 1695686400000,
+        "closeTime": 1695772799999,
+        "firstId": 3220151555,
+        "lastId": 3220849281,
+        "count": 697727
+    },
+    {
+        "symbol": "BNBUSDT",
+        "openPrice": "210.00000000",
+        "highPrice": "213.70000000",
+        "lowPrice": "209.70000000",
+        "lastPrice": "212.60000000",
+        "volume": "280709.58900000",
+        "quoteVolume": "59488753.54750000",
+        "openTime": 1695686400000,
+        "closeTime": 1695772799999,
+        "firstId": 672397461,
+        "lastId": 672496158,
+        "count": 98698
+    }
 ]
 ```
 
@@ -1616,22 +1648,22 @@ GET /api/v3/ticker/price
 
 ```javascript
 {
-  "symbol": "LTCBTC",
-  "price": "4.00000200"
+    "symbol": "LTCBTC",
+    "price": "4.00000200"
 }
 ```
 OR
 
 ```javascript
 [
-  {
-    "symbol": "LTCBTC",
-    "price": "4.00000200"
-  },
-  {
-    "symbol": "ETHBTC",
-    "price": "0.07946600"
-  }
+    {
+        "symbol": "LTCBTC",
+        "price": "4.00000200"
+    },
+    {
+        "symbol": "ETHBTC",
+        "price": "0.07946600"
+    }
 ]
 ```
 
@@ -1720,30 +1752,30 @@ GET /api/v3/ticker/bookTicker
 
 ```javascript
 {
-  "symbol": "LTCBTC",
-  "bidPrice": "4.00000000", // 最优买单价
-  "bidQty": "431.00000000", // 挂单量
-  "askPrice": "4.00000200", // 最优卖单价
-  "askQty": "9.00000000"    // 挂单量
+    "symbol": "LTCBTC",
+    "bidPrice": "4.00000000",     // 最优买单价
+    "bidQty": "431.00000000",     // 挂单量
+    "askPrice": "4.00000200",     // 最优卖单价
+    "askQty": "9.00000000"        // 挂单量
 }
 ```
 OR
 ```javascript
 [
-  {
-    "symbol": "LTCBTC",
-    "bidPrice": "4.00000000",
-    "bidQty": "431.00000000",
-    "askPrice": "4.00000200",
-    "askQty": "9.00000000"
-  },
-  {
-    "symbol": "ETHBTC",
-    "bidPrice": "0.07946700",
-    "bidQty": "9.00000000",
-    "askPrice": "100000.00000000",
-    "askQty": "1000.00000000"
-  }
+    {
+        "symbol": "LTCBTC",
+        "bidPrice": "4.00000000",
+        "bidQty": "431.00000000",
+        "askPrice": "4.00000200",
+        "askQty": "9.00000000"
+    },
+    {
+        "symbol": "ETHBTC",
+        "bidPrice": "0.07946700",
+        "bidQty": "9.00000000",
+        "askPrice": "100000.00000000",
+        "askQty": "1000.00000000"
+    }
 ]
 ```
 
@@ -1812,21 +1844,21 @@ GET /api/v3/ticker
 
 ```javascript
 {
-  "symbol":             "BNBBTC",
-  "priceChange":        "-8.00000000",  // 价格变化
-  "priceChangePercent": "-88.889",      // 价格变化百分比
-  "weightedAvgPrice":   "2.60427807",
-  "openPrice":          "9.00000000",
-  "highPrice":          "9.00000000",
-  "lowPrice":           "1.00000000",
-  "lastPrice":          "1.00000000",
-  "volume":             "187.00000000",
-  "quoteVolume":        "487.00000000",
-  "openTime":           1641859200000,  // ticker的开始时间
-  "closeTime":          1642031999999,  // ticker的结束时间
-  "firstId":            0,              // 统计时间内的第一笔trade id
-  "lastId":             60,
-  "count":              61              // 统计时间内交易笔数
+    "symbol": "BNBBTC",
+    "priceChange": "-8.00000000",        // 价格变化
+    "priceChangePercent": "-88.889",     // 价格变化百分比
+    "weightedAvgPrice": "2.60427807",
+    "openPrice": "9.00000000",
+    "highPrice": "9.00000000",
+    "lowPrice": "1.00000000",
+    "lastPrice": "1.00000000",
+    "volume": "187.00000000",
+    "quoteVolume": "487.00000000",
+    "openTime": 1641859200000,           // ticker的开始时间
+    "closeTime": 1642031999999,          // ticker的结束时间
+    "firstId": 0,                        // 统计时间内的第一笔trade id
+    "lastId": 60,
+    "count": 61                          // 统计时间内交易笔数
 }
 ```
 
@@ -1834,40 +1866,40 @@ GET /api/v3/ticker
 
 ```javascript
 [
-  {
-    "symbol": "BTCUSDT",
-    "priceChange": "-154.13000000",
-    "priceChangePercent": "-0.740",
-    "weightedAvgPrice": "20677.46305250",
-    "openPrice": "20825.27000000",
-    "highPrice": "20972.46000000",
-    "lowPrice": "20327.92000000",
-    "lastPrice": "20671.14000000",
-    "volume": "72.65112300",
-    "quoteVolume": "1502240.91155513",
-    "openTime": 1655432400000,
-    "closeTime": 1655446835460,
-    "firstId": 11147809,
-    "lastId": 11149775,
-    "count": 1967
-  },
-  {
-    "symbol": "BNBBTC",
-    "priceChange": "0.00008530",
-    "priceChangePercent": "0.823",
-    "weightedAvgPrice": "0.01043129",
-    "openPrice": "0.01036170",
-    "highPrice": "0.01049850",
-    "lowPrice": "0.01033870",
-    "lastPrice": "0.01044700",
-    "volume": "166.67000000",
-    "quoteVolume": "1.73858301",
-    "openTime": 1655432400000,
-    "closeTime": 1655446835460,
-    "firstId": 2351674,
-    "lastId": 2352034,
-    "count": 361
-  }
+    {
+        "symbol": "BTCUSDT",
+        "priceChange": "-154.13000000",
+        "priceChangePercent": "-0.740",
+        "weightedAvgPrice": "20677.46305250",
+        "openPrice": "20825.27000000",
+        "highPrice": "20972.46000000",
+        "lowPrice": "20327.92000000",
+        "lastPrice": "20671.14000000",
+        "volume": "72.65112300",
+        "quoteVolume": "1502240.91155513",
+        "openTime": 1655432400000,
+        "closeTime": 1655446835460,
+        "firstId": 11147809,
+        "lastId": 11149775,
+        "count": 1967
+    },
+    {
+        "symbol": "BNBBTC",
+        "priceChange": "0.00008530",
+        "priceChangePercent": "0.823",
+        "weightedAvgPrice": "0.01043129",
+        "openPrice": "0.01036170",
+        "highPrice": "0.01049850",
+        "lowPrice": "0.01033870",
+        "lastPrice": "0.01044700",
+        "volume": "166.67000000",
+        "quoteVolume": "1.73858301",
+        "openTime": 1655432400000,
+        "closeTime": 1655446835460,
+        "firstId": 2351674,
+        "lastId": 2352034,
+        "count": 361
+    }
 ]
 ```
 
@@ -1884,12 +1916,12 @@ GET /api/v3/ticker
     "lowPrice": "0.10000000",
     "lastPrice": "2.00000000",
     "volume": "39.00000000",
-    "quoteVolume": "13.40000000",  // 此k线内所有交易的price(价格) x volume(交易量)的总和
-    "openTime": 1656986580000,     // ticker窗口的开始时间
-    "closeTime": 1657001016795,    // ticker窗口的结束时间
-    "firstId": 0,                  // 首笔成交id
+    "quoteVolume": "13.40000000",     // 此k线内所有交易的price(价格) x volume(交易量)的总和
+    "openTime": 1656986580000,        // ticker窗口的开始时间
+    "closeTime": 1657001016795,       // ticker窗口的结束时间
+    "firstId": 0,                     // 首笔成交id
     "lastId": 34,
-    "count": 35                    // 统计时间内交易笔数
+    "count": 35                       // 统计时间内交易笔数
 }
 ```
 
@@ -1904,12 +1936,12 @@ GET /api/v3/ticker
         "lowPrice": "0.10000000",
         "lastPrice": "2.00000000",
         "volume": "39.00000000",
-        "quoteVolume": "13.40000000", // 此k线内所有交易的price(价格) x volume(交易量)的总和
-        "openTime": 1656986880000,    // ticker窗口的开始时间
-        "closeTime": 1657001297799,   // ticker窗口的结束时间
-        "firstId": 0,                 // 首笔成交id
+        "quoteVolume": "13.40000000",     // 此k线内所有交易的price(价格) x volume(交易量)的总和
+        "openTime": 1656986880000,        // ticker窗口的开始时间
+        "closeTime": 1657001297799,       // ticker窗口的结束时间
+        "firstId": 0,                     // 首笔成交id
         "lastId": 34,
-        "count": 35                   // 统计时间内交易笔数
+        "count": 35                       // 统计时间内交易笔数
     },
     {
         "symbol": "LTCBTC",
@@ -1926,6 +1958,95 @@ GET /api/v3/ticker
         "count": 33
     }
 ]
+```
+
+### 查询参考价格
+
+```
+GET /api/v3/referencePrice
+```
+
+**权重：** 2
+
+**参数：**
+
+| 名称     | 类型     | 是否必需 | 描述 |
+| -------- | -------- | -------- | ---- |
+| `symbol` |STRING| YES       |      |
+
+**数据来源：** 缓存
+
+**响应示例：**
+
+如果设置了参考价格：
+
+```javascript
+{
+  "symbol": "BAZUSD",
+  "referencePrice": "10.00",
+  "timestamp": 1770736694138   // 参考价格生效的时间
+}
+```
+
+如果未设置参考价格：
+
+```javascript
+{
+  "symbol": "BAZUSD",
+  "referencePrice": null,
+  "timestamp": 1770736694138  // 参考价格生效的时间
+}
+```
+
+### 查询参考价格计算方式
+
+```
+GET /api/v3/referencePrice/calculation
+```
+
+描述指定交易对参考价格的计算方式。
+
+**权重：** 2
+
+**参数：**
+
+| 名称           | 类型           | 是否必需 | 描述                                                                                  |
+| -------------- | -------------- | -------- | ------------------------------------------------------------------------------------- |
+| `symbol`       | STRING | YES       |                                                                                       |
+| `symbolStatus` | ENUM | NO     | 支持的值：`TRADING`（正常交易中）、`HALT`（交易终止）、`BREAK`（交易暂停）                         |
+
+**数据来源：缓存**
+
+**响应示例：**
+
+如果参考价格未被计算：
+
+```json
+{
+    "code": -2043,
+    "msg": "该交易对没有参考价格。"
+}
+```
+
+如果参考价格由撮合引擎以算术平均数计算：
+
+```json
+{
+  "symbol": "BAZUSD",
+  "calculationType": "ARITHMETIC_MEAN",
+  "bucketCount": 10,
+  "bucketWidthMs": 1000
+}
+```
+
+如果参考价格由撮合引擎外部计算：
+
+```json
+{
+  "symbol": "BAZUSD",
+  "calculationType": "EXTERNAL",
+  "externalCalculationId": 42
+}
 ```
 
 <a id="place-new-order-trade"></a>
@@ -2010,11 +2131,11 @@ Type | 强制要求的参数 | 其他信息
 返回速度最快，不包含成交信息，信息量最少
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 28,
-  "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
-  "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
-  "transactTime": 1507725176595
+    "symbol": "BTCUSDT",
+    "orderId": 28,
+    "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
+    "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
+    "transactTime": 1507725176595
 }
 ```
 
@@ -2022,22 +2143,22 @@ Type | 强制要求的参数 | 其他信息
 返回速度居中，返回吃单成交的少量信息
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 28,
-  "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
-  "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
-  "transactTime": 1507725176595,
-  "price": "1.00000000",
-  "origQty": "10.00000000",
-  "executedQty": "10.00000000",
-  "origQuoteOrderQty": "0.000000",
-  "cummulativeQuoteQty": "10.00000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "MARKET",
-  "side": "SELL"
-  "workingTime": 1507725176595,
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 28,
+    "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
+    "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
+    "transactTime": 1507725176595,
+    "price": "1.00000000",
+    "origQty": "10.00000000",
+    "executedQty": "10.00000000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "10.00000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "MARKET",
+    "side": "SELL",
+    "workingTime": 1507725176595,
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -2045,59 +2166,59 @@ Type | 强制要求的参数 | 其他信息
 返回速度最慢，返回吃单成交的详细信息
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 28,
-  "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
-  "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
-  "transactTime": 1507725176595,
-  "price": "1.00000000",
-  "origQty": "10.00000000",
-  "executedQty": "10.00000000",
-  "origQuoteOrderQty": "0.000000",
-  "cummulativeQuoteQty": "10.00000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "MARKET",
-  "side": "SELL",
-  "workingTime": 1507725176595,
-  "selfTradePreventionMode": "NONE",
-  "fills": [
-    {
-      "price": "4000.00000000",
-      "qty": "1.00000000",
-      "commission": "4.00000000",
-      "commissionAsset": "USDT",
-      "tradeId": 56
-    },
-    {
-      "price": "3999.00000000",
-      "qty": "5.00000000",
-      "commission": "19.99500000",
-      "commissionAsset": "USDT",
-      "tradeId": 57
-    },
-    {
-      "price": "3998.00000000",
-      "qty": "2.00000000",
-      "commission": "7.99600000",
-      "commissionAsset": "USDT",
-      "tradeId": 58
-    },
-    {
-      "price": "3997.00000000",
-      "qty": "1.00000000",
-      "commission": "3.99700000",
-      "commissionAsset": "USDT",
-      "tradeId": 59
-    },
-    {
-      "price": "3995.00000000",
-      "qty": "1.00000000",
-      "commission": "3.99500000",
-      "commissionAsset": "USDT",
-      "tradeId": 60
-    }
-  ]
+    "symbol": "BTCUSDT",
+    "orderId": 28,
+    "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
+    "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
+    "transactTime": 1507725176595,
+    "price": "1.00000000",
+    "origQty": "10.00000000",
+    "executedQty": "10.00000000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "10.00000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "MARKET",
+    "side": "SELL",
+    "workingTime": 1507725176595,
+    "selfTradePreventionMode": "NONE",
+    "fills": [
+        {
+            "price": "4000.00000000",
+            "qty": "1.00000000",
+            "commission": "4.00000000",
+            "commissionAsset": "USDT",
+            "tradeId": 56
+        },
+        {
+            "price": "3999.00000000",
+            "qty": "5.00000000",
+            "commission": "19.99500000",
+            "commissionAsset": "USDT",
+            "tradeId": 57
+        },
+        {
+            "price": "3998.00000000",
+            "qty": "2.00000000",
+            "commission": "7.99600000",
+            "commissionAsset": "USDT",
+            "tradeId": 58
+        },
+        {
+            "price": "3997.00000000",
+            "qty": "1.00000000",
+            "commission": "3.99700000",
+            "commissionAsset": "USDT",
+            "tradeId": 59
+        },
+        {
+            "price": "3995.00000000",
+            "qty": "1.00000000",
+            "commission": "3.99500000",
+            "commissionAsset": "USDT",
+            "tradeId": 60
+        }
+    ]
 }
 ```
 
@@ -2164,24 +2285,24 @@ computeCommissionRates | BOOLEAN      | NO           | 默认值: `false` <br> �
 
 ```javascript
 {
-  "standardCommissionForOrder": {   // 订单交易的标准佣金率
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-  },
-  "specialCommissionForOrder": {    // 订单交易的特殊佣金率
-    "maker": "0.05000000",
-    "taker": "0.06000000"
-  },
-  "taxCommissionForOrder": {        // 订单交易的税率
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-  },
-  "discount": {                     // 以BNB支付时的标准佣金折扣。
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"        // 当用BNB支付佣金时，在标准佣金上按此比率打折
-  }
+    "standardCommissionForOrder": {  // 订单交易的标准佣金率
+        "maker": "0.00000112",
+        "taker": "0.00000114"
+    },
+    "specialCommissionForOrder": {   // 订单交易的特殊佣金率
+        "maker": "0.05000000",
+        "taker": "0.06000000"
+    },
+    "taxCommissionForOrder": {       // 订单交易的税率
+        "maker": "0.00000112",
+        "taker": "0.00000114"
+    },
+    "discount": {                    // 以BNB支付时的标准佣金折扣。
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"     // 当用BNB支付佣金时，在标准佣金上按此比率打折
+    }
 }
 ```
 
@@ -2215,22 +2336,22 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 {
-  "symbol": "LTCBTC",
-  "orderId": 28,
-  "orderListId": -1,                // 除非此单是订单列表的一部分, 否则此值为 -1
-  "origClientOrderId": "myOrder1",
-  "clientOrderId": "cancelMyOrder1",
-  "transactTime": 1507725176595,
-  "price": "1.00000000",
-  "origQty": "10.00000000",
-  "executedQty": "8.00000000",
-  "origQuoteOrderQty": "0.000000",
-  "cummulativeQuoteQty": "8.00000000",
-  "status": "CANCELED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "selfTradePreventionMode": "NONE"
+    "symbol": "LTCBTC",
+    "orderId": 28,
+    "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
+    "origClientOrderId": "myOrder1",
+    "clientOrderId": "cancelMyOrder1",
+    "transactTime": 1507725176595,
+    "price": "1.00000000",
+    "origQty": "10.00000000",
+    "executedQty": "8.00000000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "8.00000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -2283,104 +2404,104 @@ timestamp | LONG | YES |
 
 ```json
 [
-  {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
-    "orderId": 11,
-    "orderListId": -1,
-    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
-    "transactTime": 1684804350068,
-    "price": "0.089853",
-    "origQty": "0.178622",
-    "executedQty": "0.000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.000000",
-    "status": "CANCELED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "selfTradePreventionMode": "NONE"
-  },
-  {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "A3EF2HCwxgZPFMrfwbgrhv",
-    "orderId": 13,
-    "orderListId": -1,
-    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
-    "transactTime": 1684804350068,
-    "price": "0.090430",
-    "origQty": "0.178622",
-    "executedQty": "0.000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.000000",
-    "status": "CANCELED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "selfTradePreventionMode": "NONE"
-  },
-  {
-    "orderListId": 1929,
-    "contingencyType": "OCO",
-    "listStatusType": "ALL_DONE",
-    "listOrderStatus": "ALL_DONE",
-    "listClientOrderId": "2inzWQdDvZLHbbAmAozX2N",
-    "transactionTime": 1585230948299,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
+    {
         "symbol": "BTCUSDT",
-        "orderId": 20,
-        "clientOrderId": "CwOOIPHSmYywx6jZX77TdL"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 21,
-        "clientOrderId": "461cPg51vQjV3zIMOXNz39"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "BTCUSDT",
-        "origClientOrderId": "CwOOIPHSmYywx6jZX77TdL",
-        "orderId": 20,
-        "orderListId": 1929,
+        "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
+        "orderId": 11,
+        "orderListId": -1,
         "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
         "transactTime": 1684804350068,
-        "price": "0.668611",
-        "origQty": "0.690354",
+        "price": "0.089853",
+        "origQty": "0.178622",
         "executedQty": "0.000000",
         "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
-        "type": "STOP_LOSS_LIMIT",
+        "type": "LIMIT",
         "side": "BUY",
-        "stopPrice": "0.378131",
-        "icebergQty": "0.017083",
         "selfTradePreventionMode": "NONE"
-      },
-      {
+    },
+    {
         "symbol": "BTCUSDT",
-        "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
-        "orderId": 21,
-        "orderListId": 1929,
+        "origClientOrderId": "A3EF2HCwxgZPFMrfwbgrhv",
+        "orderId": 13,
+        "orderListId": -1,
         "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
         "transactTime": 1684804350068,
-        "price": "0.008791",
-        "origQty": "0.690354",
+        "price": "0.090430",
+        "origQty": "0.178622",
         "executedQty": "0.000000",
         "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
+        "type": "LIMIT",
         "side": "BUY",
-        "icebergQty": "0.639962",
         "selfTradePreventionMode": "NONE"
-      }
-    ]
-  }
+    },
+    {
+        "orderListId": 1929,
+        "contingencyType": "OCO",
+        "listStatusType": "ALL_DONE",
+        "listOrderStatus": "ALL_DONE",
+        "listClientOrderId": "2inzWQdDvZLHbbAmAozX2N",
+        "transactionTime": 1585230948299,
+        "symbol": "BTCUSDT",
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 20,
+                "clientOrderId": "CwOOIPHSmYywx6jZX77TdL"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 21,
+                "clientOrderId": "461cPg51vQjV3zIMOXNz39"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "BTCUSDT",
+                "origClientOrderId": "CwOOIPHSmYywx6jZX77TdL",
+                "orderId": 20,
+                "orderListId": 1929,
+                "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+                "transactTime": 1684804350068,
+                "price": "0.668611",
+                "origQty": "0.690354",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "STOP_LOSS_LIMIT",
+                "side": "BUY",
+                "stopPrice": "0.378131",
+                "icebergQty": "0.017083",
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
+                "orderId": 21,
+                "orderListId": 1929,
+                "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+                "transactTime": 1684804350068,
+                "price": "0.008791",
+                "origQty": "0.690354",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "LIMIT_MAKER",
+                "side": "BUY",
+                "icebergQty": "0.639962",
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
+    }
 ]
 ```
 
@@ -2389,11 +2510,11 @@ timestamp | LONG | YES |
 ```
 POST /api/v3/order/cancelReplace
 ```
-撤消挂单并在同个交易对上重新下单。
 
-在撤消订单和下单前会判断: 1) 过滤器参数, 以及 2) 目前下单数量。
-
-即使请求中没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，未成交订单的数量仍然会加1。
+* 撤消同一交易对上的一个现有订单并重新下单。
+* 在执行撤单和下单操作之前，会先评估过滤器和订单数量。
+* 即使新订单未被尝试（即 `newOrderResult: NOT_ATTEMPTED`），未成交订单数量仍会增加1。
+* 通过此接口只能撤消订单列表中的单个订单，但结果与撤消整个订单列表相同。
 
 **权重:**
 1
@@ -2612,135 +2733,135 @@ timestamp | LONG | YES |
 ```javascript
 // 撤单和下单都成功
 {
-  "cancelResult": "SUCCESS",
-  "newOrderResult": "SUCCESS",
-  "cancelResponse": {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "DnLo3vTAQcjha43lAZhZ0y",
-    "orderId": 9,
-    "orderListId": -1,
-    "clientOrderId": "osxN3JXAtJvKvCqGeMWMVR",
-    "transactTime": 1684804350068,
-    "price": "0.01000000",
-    "origQty": "0.000100",
-    "executedQty": "0.00000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.00000000",
-    "status": "CANCELED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL"
-  },
-  "newOrderResponse": {
-    "symbol": "BTCUSDT",
-    "orderId": 10,
-    "orderListId": -1,
-    "clientOrderId": "wOceeeOzNORyLiQfw7jd8S",
-    "transactTime": 1652928801803,
-    "price": "0.02000000",
-    "origQty": "0.040000",
-    "executedQty": "0.00000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.00000000",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "fills": []
-  }
+    "cancelResult": "SUCCESS",
+    "newOrderResult": "SUCCESS",
+    "cancelResponse": {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "DnLo3vTAQcjha43lAZhZ0y",
+        "orderId": 9,
+        "orderListId": -1,
+        "clientOrderId": "osxN3JXAtJvKvCqGeMWMVR",
+        "transactTime": 1684804350068,
+        "price": "0.01000000",
+        "origQty": "0.000100",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL"
+    },
+    "newOrderResponse": {
+        "symbol": "BTCUSDT",
+        "orderId": 10,
+        "orderListId": -1,
+        "clientOrderId": "wOceeeOzNORyLiQfw7jd8S",
+        "transactTime": 1652928801803,
+        "price": "0.02000000",
+        "origQty": "0.040000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "fills": []
+    }
 }
 ```
 
 **响应：选择了 `STOP_ON_FAILURE` 而且账户没有超出未成交订单计数时, 撤单出现错误**
 ```javascript
 {
-  "code": -2022,
-  "msg": "Order cancel-replace failed.",
-  "data": {
-    "cancelResult": "FAILURE",
-    "newOrderResult": "NOT_ATTEMPTED",
-    "cancelResponse": {
-      "code": -2011,
-      "msg": "Unknown order sent."
-    },
-    "newOrderResponse": null
-  }
+    "code": -2022,
+    "msg": "Order cancel-replace failed.",
+    "data": {
+        "cancelResult": "FAILURE",
+        "newOrderResult": "NOT_ATTEMPTED",
+        "cancelResponse": {
+            "code": -2011,
+            "msg": "Unknown order sent."
+        },
+        "newOrderResponse": null
+    }
 }
 ```
 
 **响应：撤单成功而且账户没有超出未成交订单计数时，下单失败**
 ```javascript
 {
-  "code": -2021,
-  "msg": "Order cancel-replace partially failed.",
-  "data": {
-    "cancelResult": "SUCCESS",
-    "newOrderResult": "FAILURE",
-    "cancelResponse": {
-      "symbol": "BTCUSDT",
-      "origClientOrderId": "86M8erehfExV8z2RC8Zo8k",
-      "orderId": 3,
-      "orderListId": -1,
-      "clientOrderId": "G1kLo6aDv2KGNTFcjfTSFq",
-      "transactTime": 1684804350068,
-      "price": "0.006123",
-      "origQty": "10000.000000",
-      "executedQty": "0.000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.000000",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "LIMIT_MAKER",
-      "side": "SELL"
-    },
-    "newOrderResponse": {
-      "code": -2010,
-      "msg": "Order would immediately match and take."
+    "code": -2021,
+    "msg": "Order cancel-replace partially failed.",
+    "data": {
+        "cancelResult": "SUCCESS",
+        "newOrderResult": "FAILURE",
+        "cancelResponse": {
+            "symbol": "BTCUSDT",
+            "origClientOrderId": "86M8erehfExV8z2RC8Zo8k",
+            "orderId": 3,
+            "orderListId": -1,
+            "clientOrderId": "G1kLo6aDv2KGNTFcjfTSFq",
+            "transactTime": 1684804350068,
+            "price": "0.006123",
+            "origQty": "10000.000000",
+            "executedQty": "0.000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.000000",
+            "status": "CANCELED",
+            "timeInForce": "GTC",
+            "type": "LIMIT_MAKER",
+            "side": "SELL"
+        },
+        "newOrderResponse": {
+            "code": -2010,
+            "msg": "Order would immediately match and take."
+        }
     }
-  }
 }
 ```
 
 **响应：选择 `ALLOW_FAILURE` 而且账户没有超出未成交订单计数时, 撤单出现错误**
 ```javascript
 {
-  "code": -2021,
-  "msg": "Order cancel-replace partially failed.",
-  "data": {
-    "cancelResult": "FAILURE",
-    "newOrderResult": "SUCCESS",
-    "cancelResponse": {
-      "code": -2011,
-      "msg": "Unknown order sent."
-    },
-    "newOrderResponse": {
-      "symbol": "BTCUSDT",
-      "orderId": 11,
-      "orderListId": -1,
-      "clientOrderId": "pfojJMg6IMNDKuJqDxvoxN",
-      "transactTime": 1648540168818
+    "code": -2021,
+    "msg": "Order cancel-replace partially failed.",
+    "data": {
+        "cancelResult": "FAILURE",
+        "newOrderResult": "SUCCESS",
+        "cancelResponse": {
+            "code": -2011,
+            "msg": "Unknown order sent."
+        },
+        "newOrderResponse": {
+            "symbol": "BTCUSDT",
+            "orderId": 11,
+            "orderListId": -1,
+            "clientOrderId": "pfojJMg6IMNDKuJqDxvoxN",
+            "transactTime": 1648540168818
+        }
     }
-  }
 }
 ```
 
 **响应：选择 `cancelReplaceMode=ALLOW_FAILURE` 而且账户没有超出未成交订单计数时, 撤单和下单失败**
 ```javascript
 {
-  "code": -2022,
-  "msg": "Order cancel-replace failed.",
-  "data": {
-    "cancelResult": "FAILURE",
-    "newOrderResult": "FAILURE",
-    "cancelResponse": {
-      "code": -2011,
-      "msg": "Unknown order sent."
-    },
-    "newOrderResponse": {
-      "code": -2010,
-      "msg": "Order would immediately match and take."
+    "code": -2022,
+    "msg": "Order cancel-replace failed.",
+    "data": {
+        "cancelResult": "FAILURE",
+        "newOrderResult": "FAILURE",
+        "cancelResponse": {
+            "code": -2011,
+            "msg": "Unknown order sent."
+        },
+        "newOrderResponse": {
+            "code": -2010,
+            "msg": "Order would immediately match and take."
+        }
     }
-  }
 }
 ```
 
@@ -2748,8 +2869,8 @@ timestamp | LONG | YES |
 
 ```javascript
 {
-  "code": -1015,
-  "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+    "code": -1015,
+    "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
 }
 ```
 
@@ -2757,34 +2878,34 @@ timestamp | LONG | YES |
 
 ```javascript
 {
-  "code": -2021,
-  "msg": "Order cancel-replace partially failed.",
-  "data": {
-    "cancelResult": "SUCCESS",
-    "newOrderResult": "FAILURE",
-    "cancelResponse": {
-      "symbol": "LTCBNB",
-      "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
-      "orderId": 64,
-      "orderListId": -1,
-      "clientOrderId": "loehOJF3FjoreUBDmv739R",
-      "transactTime": 1715779007228,
-      "price": "1.00",
-      "origQty": "10.00000000",
-      "executedQty": "0.00000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.00",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "selfTradePreventionMode": "NONE"
-    },
-    "newOrderResponse": {
-      "code": -1015,
-      "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+    "code": -2021,
+    "msg": "Order cancel-replace partially failed.",
+    "data": {
+        "cancelResult": "SUCCESS",
+        "newOrderResult": "FAILURE",
+        "cancelResponse": {
+            "symbol": "LTCBNB",
+            "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
+            "orderId": 64,
+            "orderListId": -1,
+            "clientOrderId": "loehOJF3FjoreUBDmv739R",
+            "transactTime": 1715779007228,
+            "price": "1.00",
+            "origQty": "10.00000000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.00",
+            "status": "CANCELED",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "SELL",
+            "selfTradePreventionMode": "NONE"
+        },
+        "newOrderResponse": {
+            "code": -1015,
+            "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+        }
     }
-  }
 }
 ```
 
@@ -2830,28 +2951,27 @@ timestamp | LONG | YES |
 
 ```json
 {
-  "transactTime": 1741926410255,
-  "executionId": 75,
-  "amendedOrder":
-  {
-    "symbol": "BTCUSDT",
-    "orderId": 33,
-    "orderListId": -1,
-    "origClientOrderId": "5xrgbMyg6z36NzBn2pbT8H",
-    "clientOrderId": "PFaq6hIHxqFENGfdtn4J6Q",
-    "price": "6.00000000",
-    "qty": "5.00000000",
-    "executedQty": "0.00000000",
-    "preventedQty": "0.00000000",
-    "quoteOrderQty": "0.00000000",
-    "cumulativeQuoteQty": "0.00000000",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL",
-    "workingTime": 1741926410242,
-    "selfTradePreventionMode": "NONE"
-  }
+    "transactTime": 1741926410255,
+    "executionId": 75,
+    "amendedOrder": {
+        "symbol": "BTCUSDT",
+        "orderId": 33,
+        "orderListId": -1,
+        "origClientOrderId": "5xrgbMyg6z36NzBn2pbT8H",
+        "clientOrderId": "PFaq6hIHxqFENGfdtn4J6Q",
+        "price": "6.00000000",
+        "qty": "5.00000000",
+        "executedQty": "0.00000000",
+        "preventedQty": "0.00000000",
+        "quoteOrderQty": "0.00000000",
+        "cumulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "workingTime": 1741926410242,
+        "selfTradePreventionMode": "NONE"
+    }
 }
 ```
 
@@ -2859,48 +2979,45 @@ timestamp | LONG | YES |
 
 ```json
 {
-  "transactTime": 1741669661670,
-  "executionId": 22,
-  "amendedOrder":
-  {
-    "symbol": "BTCUSDT",
-    "orderId": 9,
-    "orderListId": 1,
-    "origClientOrderId": "W0fJ9fiLKHOJutovPK3oJp",
-    "clientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
-    "price": "0.00000000",
-    "qty": "4.00000000",
-    "executedQty": "0.00000000",
-    "preventedQty": "0.00000000",
-    "quoteOrderQty": "0.00000000",
-    "cumulativeQuoteQty": "0.00000000",
-    "status": "PENDING_NEW",
-    "timeInForce": "GTC",
-    "type": "MARKET",
-    "side": "BUY",
-    "selfTradePreventionMode": "NONE"
-  },
-  "listStatus":
-  {
-    "orderListId": 1,
-    "contingencyType": "OTO",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "AT7FTxZXylVSwRoZs52mt3",
-    "symbol": "BTCUSDT",
-    "orders":
-    [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 8,
-        "clientOrderId": "GkwwHZUUbFtZOoH1YsZk9Q"
-      },
-      {
+    "transactTime": 1741669661670,
+    "executionId": 22,
+    "amendedOrder": {
         "symbol": "BTCUSDT",
         "orderId": 9,
-        "clientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi"
-      }
-    ]
-  }
+        "orderListId": 1,
+        "origClientOrderId": "W0fJ9fiLKHOJutovPK3oJp",
+        "clientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
+        "price": "0.00000000",
+        "qty": "4.00000000",
+        "executedQty": "0.00000000",
+        "preventedQty": "0.00000000",
+        "quoteOrderQty": "0.00000000",
+        "cumulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "MARKET",
+        "side": "BUY",
+        "selfTradePreventionMode": "NONE"
+    },
+    "listStatus": {
+        "orderListId": 1,
+        "contingencyType": "OTO",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "AT7FTxZXylVSwRoZs52mt3",
+        "symbol": "BTCUSDT",
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 8,
+                "clientOrderId": "GkwwHZUUbFtZOoH1YsZk9Q"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 9,
+                "clientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi"
+            }
+        ]
+    }
 }
 ```
 
@@ -2965,64 +3082,64 @@ timestamp|LONG|YES|
 
 ```json
 {
-  "orderListId": 0,
-  "contingencyType": "OCO",
-  "listStatusType": "EXEC_STARTED",
-  "listOrderStatus": "EXECUTING",
-  "listClientOrderId": "JYVpp3F0f5CAG15DhtrqLp",
-  "transactionTime": 1563417480525,
-  "symbol": "LTCBTC",
-  "orders": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 2,
-      "clientOrderId": "Kk7sqHb9J6mJWTMDVW7Vos"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 3,
-      "clientOrderId": "xTXKaGYd4bluPVp78IVRvl"
-    }
-  ],
-  "orderReports": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 2,
-      "orderListId": 0,
-      "clientOrderId": "Kk7sqHb9J6mJWTMDVW7Vos",
-      "transactTime": 1563417480525,
-      "price": "0.000000",
-      "origQty": "0.624363",
-      "executedQty": "0.000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "STOP_LOSS",
-      "side": "BUY",
-      "stopPrice": "0.960664",
-      "workingTime": -1,
-      "selfTradePreventionMode": "NONE"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 3,
-      "orderListId": 0,
-      "clientOrderId": "xTXKaGYd4bluPVp78IVRvl",
-      "transactTime": 1563417480525,
-      "price": "0.036435",
-      "origQty": "0.624363",
-      "executedQty": "0.000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "LIMIT_MAKER",
-      "side": "BUY",
-      "workingTime": 1563417480525,
-      "selfTradePreventionMode": "NONE"
-    }
-  ]
+    "orderListId": 0,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "JYVpp3F0f5CAG15DhtrqLp",
+    "transactionTime": 1563417480525,
+    "symbol": "LTCBTC",
+    "orders": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 2,
+            "clientOrderId": "Kk7sqHb9J6mJWTMDVW7Vos"
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 3,
+            "clientOrderId": "xTXKaGYd4bluPVp78IVRvl"
+        }
+    ],
+    "orderReports": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 2,
+            "orderListId": 0,
+            "clientOrderId": "Kk7sqHb9J6mJWTMDVW7Vos",
+            "transactTime": 1563417480525,
+            "price": "0.000000",
+            "origQty": "0.624363",
+            "executedQty": "0.000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "STOP_LOSS",
+            "side": "BUY",
+            "stopPrice": "0.960664",
+            "workingTime": -1,
+            "selfTradePreventionMode": "NONE"
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 3,
+            "orderListId": 0,
+            "clientOrderId": "xTXKaGYd4bluPVp78IVRvl",
+            "transactTime": 1563417480525,
+            "price": "0.036435",
+            "origQty": "0.624363",
+            "executedQty": "0.000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT_MAKER",
+            "side": "BUY",
+            "workingTime": 1563417480525,
+            "selfTradePreventionMode": "NONE"
+        }
+    ]
 }
 ```
 
@@ -3751,9 +3868,9 @@ POST /api/v3/orderList/opoco
 
 #### 取消订单列表 (TRADE)
 
-``
+```
 DELETE /api/v3/orderList
-``
+```
 
 取消整个订单列表。
 
@@ -3783,62 +3900,62 @@ timestamp|LONG|YES|
 
 ```javascript
 {
-  "orderListId": 0,
-  "contingencyType": "OCO",
-  "listStatusType": "ALL_DONE",
-  "listOrderStatus": "ALL_DONE",
-  "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN",
-  "transactionTime": 1574040868128,
-  "symbol": "LTCBTC",
-  "orders": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 2,
-      "clientOrderId": "pO9ufTiFGg3nw2fOdgeOXa"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 3,
-      "clientOrderId": "TXOvglzXuaubXAaENpaRCB"
-    }
-  ],
-  "orderReports": [
-    {
-      "symbol": "LTCBTC",
-      "origClientOrderId": "pO9ufTiFGg3nw2fOdgeOXa",
-      "orderId": 2,
-      "orderListId": 0,
-      "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
-      "transactTime": 1688005070874,
-      "price": "1.00000000",
-      "origQty": "10.00000000",
-      "executedQty": "0.00000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.00000000",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "STOP_LOSS_LIMIT",
-      "side": "SELL",
-      "stopPrice": "1.00000000"
-    },
-    {
-      "symbol": "LTCBTC",
-      "origClientOrderId": "TXOvglzXuaubXAaENpaRCB",
-      "orderId": 3,
-      "orderListId": 0,
-      "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
-      "transactTime": 1688005070874,
-      "price": "3.00000000",
-      "origQty": "10.00000000",
-      "executedQty": "0.00000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.00000000",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "LIMIT_MAKER",
-      "side": "SELL"
-    }
-  ]
+    "orderListId": 0,
+    "contingencyType": "OCO",
+    "listStatusType": "ALL_DONE",
+    "listOrderStatus": "ALL_DONE",
+    "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN",
+    "transactionTime": 1574040868128,
+    "symbol": "LTCBTC",
+    "orders": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 2,
+            "clientOrderId": "pO9ufTiFGg3nw2fOdgeOXa"
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 3,
+            "clientOrderId": "TXOvglzXuaubXAaENpaRCB"
+        }
+    ],
+    "orderReports": [
+        {
+            "symbol": "LTCBTC",
+            "origClientOrderId": "pO9ufTiFGg3nw2fOdgeOXa",
+            "orderId": 2,
+            "orderListId": 0,
+            "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+            "transactTime": 1688005070874,
+            "price": "1.00000000",
+            "origQty": "10.00000000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "CANCELED",
+            "timeInForce": "GTC",
+            "type": "STOP_LOSS_LIMIT",
+            "side": "SELL",
+            "stopPrice": "1.00000000"
+        },
+        {
+            "symbol": "LTCBTC",
+            "origClientOrderId": "TXOvglzXuaubXAaENpaRCB",
+            "orderId": 3,
+            "orderListId": 0,
+            "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+            "transactTime": 1688005070874,
+            "price": "3.00000000",
+            "origQty": "10.00000000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "CANCELED",
+            "timeInForce": "GTC",
+            "type": "LIMIT_MAKER",
+            "side": "SELL"
+        }
+    ]
 }
 ```
 
@@ -3892,35 +4009,35 @@ timestamp               | LONG | YES |
 
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
-  "transactTime": 1689149087774,
-  "price": "31000.00000000",
-  "origQty": "0.50000000",
-  "executedQty": "0.50000000",
-  "origQuoteOrderQty": "0.000000",
-  "cummulativeQuoteQty": "14000.00000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "workingTime": 1689149087774,
-  "fills": [
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "28000.00000000",
-      "qty": "0.50000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 0
-    }
-  ],
-  "workingFloor": "SOR",
-  "selfTradePreventionMode": "NONE",
-  "usedSor": true
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+    "transactTime": 1689149087774,
+    "price": "31000.00000000",
+    "origQty": "0.50000000",
+    "executedQty": "0.50000000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "14000.00000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "workingTime": 1689149087774,
+    "fills": [
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "28000.00000000",
+            "qty": "0.50000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 0
+        }
+    ],
+    "workingFloor": "SOR",
+    "selfTradePreventionMode": "NONE",
+    "usedSor": true
 }
 ```
 
@@ -3965,20 +4082,20 @@ computeCommissionRates | BOOLEAN      | NO            | 默认值: `false`
 
 ```javascript
 {
-  "standardCommissionForOrder": {  // 订单交易的标准佣金率。
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-  },
-  "taxCommissionForOrder": {       // 订单交易的税率。
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-  },
-  "discount": {                    // 以BNB支付时的标准佣金折扣。
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"       // 当用BNB支付佣金时，在标准佣金上按此比率打折。
-  }
+    "standardCommissionForOrder": {  // 订单交易的标准佣金率。
+        "maker": "0.00000112",
+        "taker": "0.00000114"
+    },
+    "taxCommissionForOrder": {       // 订单交易的税率。
+        "maker": "0.00000112",
+        "taker": "0.00000114"
+    },
+    "discount": {                    // 以BNB支付时的标准佣金折扣。
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"     // 当用BNB支付佣金时，在标准佣金上按此比率打折。
+    }
 }
 ```
 
@@ -4007,40 +4124,38 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 {
-  "makerCommission": 15,
-  "takerCommission": 15,
-  "buyerCommission": 0,
-  "sellerCommission": 0,
-  "commissionRates": {
-    "maker": "0.00150000",
-    "taker": "0.00150000",
-    "buyer": "0.00000000",
-    "seller": "0.00000000"
-  },
-  "canTrade": true,
-  "canWithdraw": true,
-  "canDeposit": true,
-  "brokered": false,
-  "requireSelfTradePrevention": false,
-  "preventSor": false,
-  "updateTime": 123456789,
-  "accountType": "SPOT",
-  "balances": [
-    {
-      "asset": "BTC",
-      "free": "4723846.89208129",
-      "locked": "0.00000000"
+    "makerCommission": 15,
+    "takerCommission": 15,
+    "buyerCommission": 0,
+    "sellerCommission": 0,
+    "commissionRates": {
+        "maker": "0.00150000",
+        "taker": "0.00150000",
+        "buyer": "0.00000000",
+        "seller": "0.00000000"
     },
-    {
-      "asset": "LTC",
-      "free": "4763368.68006011",
-      "locked": "0.00000000"
-    }
-  ],
-  "permissions": [
-    "SPOT"
-  ],
-  "uid": 354937868
+    "canTrade": true,
+    "canWithdraw": true,
+    "canDeposit": true,
+    "brokered": false,
+    "requireSelfTradePrevention": false,
+    "preventSor": false,
+    "updateTime": 123456789,
+    "accountType": "SPOT",
+    "balances": [
+        {
+            "asset": "BTC",
+            "free": "4723846.89208129",
+            "locked": "0.00000000"
+        },
+        {
+            "asset": "LTC",
+            "free": "4763368.68006011",
+            "locked": "0.00000000"
+        }
+    ],
+    "permissions": ["SPOT"],
+    "uid": 354937868
 }
 ```
 
@@ -4075,27 +4190,27 @@ timestamp | LONG | YES |
 
 ```javascript
 {
-  "symbol": "LTCBTC",               // 交易对
-  "orderId": 1,                     // 系统的订单ID
-  "orderListId": -1,                // 除非此单是订单列表的一部分, 否则此值为 -1
-  "clientOrderId": "myOrder1",      // 客户自己设置的ID
-  "price": "0.1",                   // 订单价格
-  "origQty": "1.0",                 // 用户设置的原始订单数量
-  "executedQty": "0.0",             // 交易的订单数量
-  "origQuoteOrderQty": "0.000000",
-  "cummulativeQuoteQty": "0.0",     // 累计交易的金额
-  "status": "NEW",                  // 订单状态
-  "timeInForce": "GTC",             // 订单的时效方式
-  "type": "LIMIT",                  // 订单类型， 比如市价单，现价单等
-  "side": "BUY",                    // 订单方向，买还是卖
-  "stopPrice": "0.0",               // 止损价格
-  "icebergQty": "0.0",              // 冰山数量
-  "time": 1499827319559,            // 订单时间
-  "updateTime": 1499827319559,      // 最后更新时间
-  "isWorking": true,                // 订单是否出现在orderbook中
-  "workingTime":1499827319559,      // 订单添加到 order book 的时间
-  "origQuoteOrderQty": "0.000000",  // 原始的交易金额
-  "selfTradePreventionMode": "NONE" // 如何处理自我交易模式
+    "symbol": "LTCBTC",                   // 交易对
+    "orderId": 1,                         // 系统的订单ID
+    "orderListId": -1,                    // 除非此单是订单列表的一部分, 否则此值为 -1
+    "clientOrderId": "myOrder1",          // 客户自己设置的ID
+    "price": "0.1",                       // 订单价格
+    "origQty": "1.0",                     // 用户设置的原始订单数量
+    "executedQty": "0.0",                 // 交易的订单数量
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "0.0",         // 累计交易的金额
+    "status": "NEW",                      // 订单状态
+    "timeInForce": "GTC",                 // 订单的时效方式
+    "type": "LIMIT",                      // 订单类型， 比如市价单，现价单等
+    "side": "BUY",                        // 订单方向，买还是卖
+    "stopPrice": "0.0",                   // 止损价格
+    "icebergQty": "0.0",                  // 冰山数量
+    "time": 1499827319559,                // 订单时间
+    "updateTime": 1499827319559,          // 最后更新时间
+    "isWorking": true,                    // 订单是否出现在orderbook中
+    "workingTime": 1499827319559,         // 订单添加到 order book 的时间
+    "origQuoteOrderQty": "0.000000",      // 原始的交易金额
+    "selfTradePreventionMode": "NONE"     // 如何处理自我交易模式
 }
 ```
 
@@ -4127,29 +4242,29 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 [
-  {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "updateTime": 1499827319559,
-    "isWorking": true,
-    "origQuoteOrderQty": "0.000000",
-    "workingTime": 1499827319559,
-    "selfTradePreventionMode": "NONE"
-  }
+    {
+        "symbol": "LTCBTC",
+        "orderId": 1,
+        "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
+        "clientOrderId": "myOrder1",
+        "price": "0.1",
+        "origQty": "1.0",
+        "executedQty": "0.0",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.0",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.0",
+        "icebergQty": "0.0",
+        "time": 1499827319559,
+        "updateTime": 1499827319559,
+        "isWorking": true,
+        "origQuoteOrderQty": "0.000000",
+        "workingTime": 1499827319559,
+        "selfTradePreventionMode": "NONE"
+    }
 ]
 ```
 
@@ -4187,29 +4302,29 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 [
-  {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "orderListId": -1,  // 除非此单是订单列表的一部分, 否则此值为 -1
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "origQuoteOrderQty": "0.0",
-    "cummulativeQuoteQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "updateTime": 1499827319559,
-    "isWorking": true,
-    "origQuoteOrderQty": "0.000000",
-    "workingTime": 1499827319559,
-    "selfTradePreventionMode": "NONE"
-  }
+    {
+        "symbol": "LTCBTC",
+        "orderId": 1,
+        "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
+        "clientOrderId": "myOrder1",
+        "price": "0.1",
+        "origQty": "1.0",
+        "executedQty": "0.0",
+        "origQuoteOrderQty": "0.0",
+        "cummulativeQuoteQty": "0.0",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.0",
+        "icebergQty": "0.0",
+        "time": 1499827319559,
+        "updateTime": 1499827319559,
+        "isWorking": true,
+        "origQuoteOrderQty": "0.000000",
+        "workingTime": 1499827319559,
+        "selfTradePreventionMode": "NONE"
+    }
 ]
 ```
 
@@ -4217,9 +4332,9 @@ timestamp | LONG | YES |
 
 #### 查询订单列表 (USER_DATA)
 
-``
+```
 GET /api/v3/orderList
-``
+```
 
 根据提供的可选参数检索特定的订单列表。
 
@@ -4265,9 +4380,9 @@ timestamp|LONG|YES|
 
 #### 查询所有订单列表 (USER_DATA)
 
-``
+```
 GET /api/v3/allOrderList
-``
+```
 
 根据提供的可选参数检索所有的订单列表。
 
@@ -4293,56 +4408,56 @@ timestamp|LONG|YES|
 
 ```javascript
 [
-  {
-    "orderListId": 29,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "amEEAXryFzFwYF1FeRpUoZ",
-    "transactionTime": 1565245913483,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
+    {
+        "orderListId": 29,
+        "contingencyType": "OCO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "amEEAXryFzFwYF1FeRpUoZ",
+        "transactionTime": 1565245913483,
         "symbol": "LTCBTC",
-        "orderId": 4,
-        "clientOrderId": "oD7aesZqjEGlZrbtRpy5zB"
-      },
-      {
+        "orders": [
+            {
+                "symbol": "LTCBTC",
+                "orderId": 4,
+                "clientOrderId": "oD7aesZqjEGlZrbtRpy5zB"
+            },
+            {
+                "symbol": "LTCBTC",
+                "orderId": 5,
+                "clientOrderId": "Jr1h6xirOxgeJOUuYQS7V3"
+            }
+        ]
+    },
+    {
+        "orderListId": 28,
+        "contingencyType": "OCO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "hG7hFNxJV6cZy3Ze4AUT4d",
+        "transactionTime": 1565245913407,
         "symbol": "LTCBTC",
-        "orderId": 5,
-        "clientOrderId": "Jr1h6xirOxgeJOUuYQS7V3"
-      }
-    ]
-  },
-  {
-    "orderListId": 28,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "hG7hFNxJV6cZy3Ze4AUT4d",
-    "transactionTime": 1565245913407,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 2,
-        "clientOrderId": "j6lFOfbmFMRjTYA7rRJ0LP"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 3,
-        "clientOrderId": "z0KCjOdditiLS5ekAFtK81"
-      }
-    ]
-  }
+        "orders": [
+            {
+                "symbol": "LTCBTC",
+                "orderId": 2,
+                "clientOrderId": "j6lFOfbmFMRjTYA7rRJ0LP"
+            },
+            {
+                "symbol": "LTCBTC",
+                "orderId": 3,
+                "clientOrderId": "z0KCjOdditiLS5ekAFtK81"
+            }
+        ]
+    }
 ]
 ```
 
 #### 查询订单列表挂单 (USER_DATA)
 
-``
+```
 GET /api/v3/openOrderList
-``
+```
 
 **权重:** 6
 
@@ -4361,27 +4476,27 @@ timestamp|LONG|YES|
 
 ```javascript
 [
-  {
-    "orderListId": 31,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
-    "transactionTime": 1565246080644,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
+    {
+        "orderListId": 31,
+        "contingencyType": "OCO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
+        "transactionTime": 1565246080644,
         "symbol": "LTCBTC",
-        "orderId": 4,
-        "clientOrderId": "r3EH2N76dHfLoSZWIUw1bT"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 5,
-        "clientOrderId": "Cv1SnyPD3qhqpbjpYEHbd2"
-      }
-    ]
-  }
+        "orders": [
+            {
+                "symbol": "LTCBTC",
+                "orderId": 4,
+                "clientOrderId": "r3EH2N76dHfLoSZWIUw1bT"
+            },
+            {
+                "symbol": "LTCBTC",
+                "orderId": 5,
+                "clientOrderId": "Cv1SnyPD3qhqpbjpYEHbd2"
+            }
+        ]
+    }
 ]
 ```
 
@@ -4430,19 +4545,21 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 [
-  {
-    "symbol": "BNBBTC",
-    "id": 28457,
-    "orderId": 100234,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "commission": "10.10000000",
-    "commissionAsset": "BNB",
-    "time": 1499865549590,
-    "isBuyer": true,
-    "isMaker": false,
-    "isBestMatch": true
-  }
+    {
+        "symbol": "BNBBTC",
+        "id": 28457,
+        "orderId": 100234,
+        "orderListId": -1,
+        "price": "4.00000100",
+        "qty": "12.00000000",
+        "quoteQty": "48.000012",
+        "commission": "10.10000000",
+        "commissionAsset": "BNB",
+        "time": 1499865549590,
+        "isBuyer": true,
+        "isMaker": false,
+        "isBestMatch": true
+    }
 ]
 ```
 
@@ -4469,20 +4586,20 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 [
-  {
-    "rateLimitType": "ORDERS",
-    "interval": "SECOND",
-    "intervalNum": 10,
-    "limit": 10000,
-    "count": 0
-  },
-  {
-    "rateLimitType": "ORDERS",
-    "interval": "DAY",
-    "intervalNum": 1,
-    "limit": 20000,
-    "count": 0
-  }
+    {
+        "rateLimitType": "ORDERS",
+        "interval": "SECOND",
+        "intervalNum": 10,
+        "limit": 10000,
+        "count": 0
+    },
+    {
+        "rateLimitType": "ORDERS",
+        "interval": "DAY",
+        "intervalNum": 1,
+        "limit": 20000,
+        "count": 0
+    }
 ]
 ```
 
@@ -4504,7 +4621,7 @@ GET /api/v3/myPreventedMatches
 
 **参数:**
 
-名称                 | 类型   | 是否必需	     | 描述
+名称                 | 类型   | 是否必需       | 描述
 ------------        | ----   | ------------ | ------------
 symbol              | STRING | YES          |
 preventedMatchId    |LONG    | NO           |
@@ -4530,18 +4647,18 @@ timestamp           | LONG   | YES          |
 
 ```json
 [
-  {
-    "symbol": "BTCUSDT",
-    "preventedMatchId": 1,
-    "takerOrderId": 5,
-    "makerSymbol": "BTCUSDT",
-    "makerOrderId": 3,
-    "tradeGroupId": 1,
-    "selfTradePreventionMode": "EXPIRE_MAKER",
-    "price": "1.100000",
-    "makerPreventedQuantity": "1.300000",
-    "transactTime": 1669101687094
-  }
+    {
+        "symbol": "BTCUSDT",
+        "preventedMatchId": 1,
+        "takerOrderId": 5,
+        "makerSymbol": "BTCUSDT",
+        "makerOrderId": 3,
+        "tradeGroupId": 1,
+        "selfTradePreventionMode": "EXPIRE_MAKER",
+        "price": "1.100000",
+        "makerPreventedQuantity": "1.300000",
+        "transactTime": 1669101687094
+    }
 ]
 ```
 
@@ -4590,22 +4707,22 @@ timestamp                |LONG   |No        |
 
 ```javascript
 [
-  {
-    "symbol": "BTCUSDT",
-    "allocationId": 0,
-    "allocationType": "SOR",
-    "orderId": 1,
-    "orderListId": -1,
-    "price": "1.00000000",
-    "qty": "5.00000000",
-    "quoteQty": "5.00000000",
-    "commission": "0.00000000",
-    "commissionAsset": "BTC",
-    "time": 1687506878118,
-    "isBuyer": true,
-    "isMaker": false,
-    "isAllocator": false
-  }
+    {
+        "symbol": "BTCUSDT",
+        "allocationId": 0,
+        "allocationType": "SOR",
+        "orderId": 1,
+        "orderListId": -1,
+        "price": "1.00000000",
+        "qty": "5.00000000",
+        "quoteQty": "5.00000000",
+        "commission": "0.00000000",
+        "commissionAsset": "BTC",
+        "time": 1687506878118,
+        "isBuyer": true,
+        "isMaker": false,
+        "isAllocator": false
+    }
 ]
 ```
 
@@ -4635,31 +4752,31 @@ symbol        | STRING | YES          |
 
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "standardCommission": {          // 订单交易的标准佣金率。
-    "maker": "0.00000010",
-    "taker": "0.00000020",
-    "buyer": "0.00000030",
-    "seller": "0.00000040"
-  },
-  "specialCommission": {         // 订单交易的特殊佣金率。
-    "maker": "0.01000000",
-    "taker": "0.02000000",
-    "buyer": "0.03000000",
-    "seller": "0.04000000"
-  },
-  "taxCommission": {              // 订单交易的税率。
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-    "buyer": "0.00000118",
-    "seller": "0.00000116"
-  },
-  "discount": {                   // 使用BNB支付时的佣金折扣。
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.7500000"       // 当用BNB支付佣金时，在标准佣金上按此比率打折。
-  }
+    "symbol": "BTCUSDT",
+    "standardCommission": {          // 订单交易的标准佣金率。
+        "maker": "0.00000010",
+        "taker": "0.00000020",
+        "buyer": "0.00000030",
+        "seller": "0.00000040"
+    },
+    "specialCommission": {           // 订单交易的特殊佣金率。
+        "maker": "0.01000000",
+        "taker": "0.02000000",
+        "buyer": "0.03000000",
+        "seller": "0.04000000"
+    },
+    "taxCommission": {               // 订单交易的税率。
+        "maker": "0.00000112",
+        "taker": "0.00000114",
+        "buyer": "0.00000118",
+        "seller": "0.00000116"
+    },
+    "discount": {                    // 使用BNB支付时的佣金折扣。
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.7500000"      // 当用BNB支付佣金时，在标准佣金上按此比率打折。
+    }
 }
 ```
 
@@ -4692,26 +4809,26 @@ timestamp | LONG | YES |
 
 ```json
 [
-  {
-      "symbol": "BTCUSDT",
-      "orderId": 9,
-      "executionId": 22,
-      "origClientOrderId": "W0fJ9fiLKHOJutovPK3oJp",
-      "newClientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
-      "origQty": "5.00000000",
-      "newQty": "4.00000000",
-      "time": 1741669661670
-  },
-  {
-      "symbol": "BTCUDST",
-      "orderId": 9,
-      "executionId": 25,
-      "origClientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
-      "newClientOrderId": "5uS0r35ohuQyDlCzZuYXq2",
-      "origQty": "4.00000000",
-      "newQty": "3.00000000",
-      "time": 1741672924895
-  }
+    {
+        "symbol": "BTCUSDT",
+        "orderId": 9,
+        "executionId": 22,
+        "origClientOrderId": "W0fJ9fiLKHOJutovPK3oJp",
+        "newClientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
+        "origQty": "5.00000000",
+        "newQty": "4.00000000",
+        "time": 1741669661670
+    },
+    {
+        "symbol": "BTCUDST",
+        "orderId": 9,
+        "executionId": 25,
+        "origClientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
+        "newClientOrderId": "5uS0r35ohuQyDlCzZuYXq2",
+        "origQty": "4.00000000",
+        "newQty": "3.00000000",
+        "time": 1741672924895
+    }
 ]
 ```
 
@@ -4742,24 +4859,24 @@ timestamp  | LONG   | YES     |
 
 ```javascript
 {
-  "exchangeFilters": [
-    {
-      "filterType": "EXCHANGE_MAX_NUM_ORDERS",
-      "maxNumOrders": 1000
-    }
-  ],
-  "symbolFilters": [
-    {
-      "filterType": "MAX_NUM_ORDER_LISTS",
-      "maxNumOrderLists": 20
-    }
-  ],
-  "assetFilters": [
-    {
-      "filterType": "MAX_ASSET",
-      "asset": "JPY",
-      "limit": "1000000.00000000"
-    }
-  ]
+    "exchangeFilters": [
+        {
+            "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+            "maxNumOrders": 1000
+        }
+    ],
+    "symbolFilters": [
+        {
+            "filterType": "MAX_NUM_ORDER_LISTS",
+            "maxNumOrderLists": 20
+        }
+    ],
+    "assetFilters": [
+        {
+            "filterType": "MAX_ASSET",
+            "asset": "JPY",
+            "limit": "1000000.00000000"
+        }
+    ]
 }
 ```

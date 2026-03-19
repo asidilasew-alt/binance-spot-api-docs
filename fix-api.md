@@ -84,6 +84,32 @@
   * This does not always mean that the request failed in the Matching Engine.
   * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 * If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* To ensure uninterrupted connectivity, please make sure that your client sends **SNI (Server Name Indication)** during the TLS handshake and performs certificate validation against the intended hostname. <br>
+Clients that do not send SNI may receive an unexpected certificate, which can result in TLS handshake or hostname verification failures.
+
+<details>
+<summary>Example implementations</summary>
+
+### NodeJS
+If you are using Node.js and connecting via raw TLS sockets (`tls.connect()`), you must explicitly set the servername option. Please refer to the sample below:
+
+```javascript
+  const tls = require("tls");
+  const hostname = "fix-dc.binance.com"; //EXAMPLE
+
+  const options = {
+     host: hostname,
+     port: 9002,
+     servername: hostname                // enables SNI
+   };
+```
+
+Note that: NodeJS doesn't enable SNI by default for TLS (See [https://nodejs.org/api/tls.html#tlsconnectoptions-callback](https://nodejs.org/api/tls.html#tlsconnectoptions-callback)). <br>
+If you are using standard HTTPS libraries in Node.js (e.g., `https.request()`, `axios`, `fetch`), these typically set SNI automatically when connecting via a hostname/URL.
+
+### Other languages/custom TLS implementations
+When using custom TLS agents / TLS APIs, ensure you set the equivalent field (often named `server_hostname`, `hostname`, or `ServerName`) to the endpoint hostname so SNI is sent.
+</details>
 
 **FIX sessions only support Ed25519 keys.** </br>
 
@@ -92,18 +118,19 @@ on how to set up an Ed25519 key pair.
 
 ### FIX API Order Entry sessions
 
-- Endpoint is: `tcp+tls://fix-oe.binance.com:9000`
-- Supports placing orders, canceling orders, and querying current limit usage.
-- Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
-- Only API keys with `FIX_API` are allowed to connect.
-- QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+* Endpoint is: `tcp+tls://fix-oe.binance.com:9000`
+* Supports placing orders, canceling orders, and querying current limit usage.
+* Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+* Only API keys with `FIX_API` are allowed to connect.
+* QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### FIX API Drop Copy sessions
 
-- Endpoint is: `tcp+tls://fix-dc.binance.com:9000`
-- Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
-- Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
-- QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+* Endpoint is: `tcp+tls://fix-dc.binance.com:9000`
+* Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+* Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
+* QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+* Data in Drop Copy sessions is delayed by 1 second.
 
 ### FIX API Market Data sessions
 
@@ -747,6 +774,7 @@ Sent by the server whenever an order state changes.
 | 835   | PegMoveType | CHAR | N | Describes whether peg is fixed or floats. Required for Pegged Orders and must be set to `1` (FIXED) |
 | 836   | PegOffsetType | CHAR | N | Type of price peg offset. <br> Possible values: <br></br> `3`  - PRICE_TIER|
 | 839   | PeggedPrice  | PRICE  | N |  Current price the order is pegged at|
+| 25056| ExpiryReason | STRING | N| Cause of the order’s expiration |
 
 **Sample message:**
 
@@ -1023,29 +1051,28 @@ Sent by the server whenever an order list state changes.
 > By default, ListStatus`<N>` is sent for all order lists of an account, including those submitted in different connections.
 > Please see [Response Mode](#responsemode) for other behavior options.
 
-| Tag      | Name                         | Type         | Required | Description                                                                                                                                             |
-|----------|------------------------------|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 55       | Symbol                       | STRING       | Y        | Symbol of the order list.                                                                                                                               |
+| Tag      | Name                         | Type         | Required | Description    |
+|----------|------------------------------|--------------|----------|--------------|
+| 55       | Symbol                       | STRING       | Y        | Symbol of the order list.   |
 | 66       | ListID                       | STRING       | N        | `ListID` of the list as assigned by the exchange.                                                                                                       |
-| 25014    | ClListID                     | STRING       | N        | `ClListID` of the list as assigned on the request.                                                                                                      |
-| 25015    | OrigClListID                 | STRING       | N        |                                                                                                                                                         |
-| 1385     | ContingencyType              | INT          | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER                                                                     |
-
-| 429      | ListStatusType               | INT          | Y        | Possible values: <br></br> `2` - RESPONSE <br></br>`4` - EXEC_STARTED <br></br> `5` - ALL_DONE  <br></br> `100` - UPDATED                                                                       |
-| 431      | ListOrderStatus              | INT          | Y        | Possible values: <br></br> `3` - EXECUTING <br></br> `6` - ALL_DONE  <br></br> `7` - REJECT                                                                            |
-| 1386     | ListRejectReason             | INT          | N        | Possible values: <br></br> `99` - OTHER                                                                                                                      |
-| 103      | OrdRejReason                 | INT          | N        | Possible values: <br></br> `99` - OTHER                                                                                                                      |
-| 60       | TransactTime                 | UTCTIMESTAMP | N        | Timestamp when this event occurred.                                                                                                                     |
-| 25016    | ErrorCode                    | INT          | N        | API error code (see [Error Codes](errors.md)).                                                                                                          |
-| 58       | Text                         | STRING       | N        | Human-readable error message.                                                                                                                           |
-| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.                                                                                                           |
-| =>55     | Symbol                       | STRING       | Y        | Symbol of the order.                                                                                                                                    |
+| 25014    | ClListID                     | STRING       | N        | `ClListID` of the list as assigned on the request. |
+| 25015    | OrigClListID                 | STRING       | N        |                                                                                                   |
+| 1385     | ContingencyType              | INT          | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER  |
+| 429      | ListStatusType               | INT          | Y        | Possible values: <br></br> `2` - RESPONSE <br></br>`4` - EXEC_STARTED <br></br> `5` - ALL_DONE  <br></br> `100` - UPDATED|
+| 431      | ListOrderStatus              | INT          | Y        | Possible values: <br></br> `3` - EXECUTING <br></br> `6` - ALL_DONE  <br></br> `7` - REJECT  |
+| 1386     | ListRejectReason             | INT          | N        | Possible values: <br></br> `99` - OTHER    |
+| 103      | OrdRejReason                 | INT          | N        | Possible values: <br></br> `99` - OTHER    |
+| 60       | TransactTime                 | UTCTIMESTAMP | N        | Timestamp when this event occurred.       |
+| 25016    | ErrorCode                    | INT          | N        | API error code (see [Error Codes](errors.md)).   |
+| 58       | Text                         | STRING       | N        | Human-readable error message.     |
+| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.      |
+| =>55     | Symbol                       | STRING       | Y        | Symbol of the order.          |
 | =>37     | OrderID                      | INT          | Y        | `OrderID` of the order as assigned by the exchange.                                                                                                     |
-| =>11     | ClOrdID                      | STRING       | Y        | `ClOrdID` of the order as assigned on the request.                                                                                                      |
-| =>25010  | NoListTriggeringInstructions | NUMINGROUP   | N        | The length of the array for ListTriggeringInstructions.                                                                                          |
-| ==>25011 | ListTriggerType              | CHAR         | N        | Possible values: <br></br> `1` - ACTIVATED <br></br> `2` - PARTIALLY_FILLED <br></br> `3` - FILLED                                                                     |
-| ==>25012 | ListTriggerTriggerIndex      | INT          | N        |                                                                                                                                                         |
-| ==>25013 | ListTriggerAction            | CHAR         | N        | Possible values: <br></br> `1` - RELEASE <br></br> `2` - CANCEL                                                                                                   |
+| =>11     | ClOrdID                      | STRING       | Y        | `ClOrdID` of the order as assigned on the request. |
+| =>25010  | NoListTriggeringInstructions | NUMINGROUP   | N        | The length of the array for ListTriggeringInstructions.  |
+| ==>25011 | ListTriggerType              | CHAR         | N        | Possible values: <br></br> `1` - ACTIVATED <br></br> `2` - PARTIALLY_FILLED <br></br> `3` - FILLED |
+| ==>25012 | ListTriggerTriggerIndex      | INT          | N        |  |
+| ==>25013 | ListTriggerAction            | CHAR         | N        | Possible values: <br></br> `1` - RELEASE <br></br> `2` - CANCEL  |
 
 **Sample message:**
 
@@ -1162,7 +1189,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
 #### InstrumentListRequest `<x>`
 
-Sent by the client to query information about active instruments (i.e., those that have the TRADING status). If used for an inactive instrument, it will be responded to with a [Reject`<3>`](#reject).
+Sent by the client to query information about instruments.
 
 | Tag | Name                      | Type   | Required | Description                                                                        |
 |-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|
@@ -1494,6 +1521,9 @@ General:
     * Optional fields that are not present must be set to the corresponding `nullValue`
         * The encoders generated by `SbeTool` handle this correctly
         * Please refer to the definition of `nullValue` in the [SBE specification](https://www.fixtrading.org/standards/sbe-online/) if encoding payloads manually
+
+Decimal encoding:
+* In request messages, the values for `PriceExponent` and `QtyExponent` must be no more precise than the precision of the symbol being transacted. Symbol precision can be retrieved from the `InstrumentList` response.
 
 **Logon** message:
 * The `SenderCompID`, `TargetCompID` and `RecvWindow` fields are provided in the `Logon` FIX SBE message instead of the message header

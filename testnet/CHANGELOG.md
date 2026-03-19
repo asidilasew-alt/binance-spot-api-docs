@@ -1,9 +1,202 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-12-18**
+**Last Updated: 2026-03-16**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-03-16
+
+**Notice: This will be rolled out at approximately 9:00 UTC today.**
+
+* Symbols `BTCUSDT` and `BROCCOLI714USDC` have [Price Range Execution Rule](../faqs/price_range_execution_rules.md) enabled. The settings are for testing only and may not be indicative of settings on the live exchange.
+
+---
+
+### 2026-03-12
+
+* The removal of `!ticker@arr` for Spot Testnet has been **moved to today at 07:30 UTC**.
+---
+
+### 2026-03-11
+
+**Notice:** FIX TLS Connectivity Update on **2026-03-17**, starting from **03:00 UTC** and will take about 1 hour to complete.
+
+**Action Required:**
+
+During the update window, existing FIX connections may drop intermittently. To ensure successful reconnections and new connections afterward, please verify before our update that your client sends SNI (Server Name Indication) during the TLS handshake and validates the certificate against the requested hostname. <br>
+Clients without SNI may receive an error message during handshake related to incorrect certificate during or after the update window, leading to TLS handshake or hostname verification failures. This can occur with some Node.js clients if SNI is not explicitly configured.<br>
+Please consult the [FIX API documentation](./fix-api.md#general-api-information) for full context.
+
+---
+
+### 2026-03-09
+
+**Notice:** The changes in this section will be gradually rolled out starting from **2026-03-11 02:00 UTC** and will be finished at approximately **2026-03-12 13:00 UTC**.
+
+#### New Features
+
+* [Price Range Execution Rule](../faqs/price_range_execution_rules.md)
+  * New Endpoints/Methods
+    * REST API:
+      * `GET /api/v3/executionRules`
+      * `GET /api/v3/referencePrice`
+      * `GET /api/v3/referencePrice/calculation`
+    * WebSocket API:
+      * `executionRules`
+      * `referencePrice`
+      * `referencePrice.calculation`
+  * New JSON Stream: `<symbol>@referencePrice`
+* REST and WebSocket API SBE schema 3:3
+  * The current schema 3:2 [spot_3_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_2.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:3:
+    * New message `ExecutionRulesResponse`
+    * New message `PriceRangeExecutionRule` (to be embedded in `ExecutionRulesResponse`)
+    * New message `ReferencePriceResponse`
+    * New message `ReferencePriceCalculationResponse`
+    * New enum `executionRuleType`
+    * New enum `expiryReason`
+    * New enum `calculationType`
+    * New field `expiryReason` in `NewOrderResultResponse`, `NewOrderFullResponse`, `NewOrderListResultResponse` and `NewOrderListFullResponse`
+    * New field `expiryReason` in `ExecutionReportEvent`
+    * New message `ServerShutdownEvent` for WebSocket API only
+* FIX SBE schema 1:1
+  * This will be used for FIX Order Entry, FIX Drop Copy, and FIX Market Data.
+  * The current FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 1:1:
+    * New enum `expiryReason`
+    * New field `ExpiryReason` in `ExecutionReport`
+
+#### FIX API
+
+* ExpiryReason `<25056>` is optionally added to the ExecutionReport `<T>` message.
+  * Updated QuickFIX Schema for FIX Market Data and FIX Order Entry.
+
+#### WebSocket API
+
+* `serverShutdown` event added.
+
+#### General Changes
+* The responses to order placement and order list placement endpoints display the expiry reason depending on the value of `newOrderRespAck`:
+  * If `newOrderRespType=ACK`, the expiry reason is not displayed.
+  * If `newOrderRespType=RESULT` or `newOrderRespType=FULL` mode, the expiry reason, if any, is displayed in field `expiryReason`.
+  * This affects the following endpoints/methods:
+    * REST API
+      * `POST /api/v3/order`
+      * `POST /api/v3/sor/order`
+      * `POST /api/v3/order/cancelReplace`
+      * `POST /api/v3/order/oco`
+      * `POST /api/v3/orderList/oco`
+      * `POST /api/v3/orderList/oto`
+      * `POST /api/v3/orderList/otoco`
+      * `POST /api/v3/orderList/opo`
+      * `POST /api/v3/orderList/opoco`
+    * WebSocket API
+      * `order.place`
+      * `sor.order.place`
+      * `order.cancelReplace`
+      * `orderList.place`
+      * `orderList.place.oco`
+      * `orderList.place.oto`
+      * `orderList.place.otoco`
+      * `orderList.place.opo`
+      * `orderList.place.opoco`
+  * In User Data Streams, `executionReport` events have a new optional field, `eR`, which shows the expiry reason, if any.
+* These endpoints have been deprecated for a long time and will be retired:
+  * `GET /api/v1/ping`
+  * `GET /api/v1/time`
+  * `POST /api/v1/userDataStream`
+  * `PUT /api/v1/userDataStream`
+  * `GET /api/v1/ticker/bookTicker`
+  * `GET /api/v1/ticker/price`
+  * `GET /api/v1/klines`
+  * `GET /api/v1/historicalTrades`
+  * `GET /api/v1/depth`
+  * `GET /api/v1/aggTrades`
+  * `GET /api/v1/ticker/24hr`
+* The following endpoints will be retired:
+  * `GET /api/v1/userDataStream`
+  * `DELETE /api/v1/userDataStream`
+  * `GET /api/v1/trades`
+
+---
+
+### 2026-03-05
+
+#### New Features
+* Users of the Spot Test Network can now choose to add commissions on their Testnet orders, if they want to test their integration of commission APIs and fields.
+
+---
+
+### 2026-02-24
+
+* Following the announcement on [2025-11-28](#2025-11-28), `!ticker@arr` will be retired on **2026-03-26**
+* [`ICEBERG_PARTS`](https://developers.binance.com/docs/binance-spot-api-docs/testnet/filters#iceberg_parts) will be increased to 100 for all symbols starting 07:30 UTC.
+
+---
+
+### 2026-02-09
+
+* Clarified exponent field requirements in [FIX SBE documentation](fix-api.md#fix-sbe)
+
+---
+
+### 2026-02-04
+
+**Data reset**
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+
+REST and WebSocket API:
+
+* Reminder that SBE 3:0 schema will be retired on 2026-02-06, [6 months after being deprecated](../faqs/sbe_faq.md#regarding-legacy-support).
+
+---
+
+### 2026-02-02
+
+* Documented that [FIX Drop Copy session](fix-api.md#fix-api-drop-copy-sessions) data is delayed by 1 second. This has been the delay since the inception of the FIX API.
+
+---
+
+### 2026-01-27
+
+* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/testnet/filters#iceberg_parts) will be increased to 50 for all symbols today.
+
+---
+
+### 2026-01-26
+
+* Added undocumented `recvWindow` to `userDataStream.subscribe.signature`.
+
+---
+
+### 2026-01-21
+
+#### REST and WebSocket API
+
+Following the announcement from [2025-10-24](#2025-10-24), the following endpoints/methods will no longer be available starting from **2026-02-04, 07:00 UTC**
+
+REST API
+* `POST /api/v3/userDataStream`
+* `PUT /api/v3/userDataStream`
+* `DELETE /api/v3/userDataStream`
+
+WebSocket API
+
+* `userDataStream.start`
+* `userDataStream.ping`
+* `userDataStream.stop`
+
+---
+
+### 2026-01-07
+
+**Data reset**
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+
+---
 
 ### 2025-12-18
 
@@ -431,15 +624,15 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 Error messages are clearer when a tag is invalid, missing a value, or when the field value is empty or malformed
   * If the tag number was invalid, you will receive the error:
     ```json
-    {"code": -1169, "msg": "Invalid tag number."}
+    { "code": -1169, "msg": "Invalid tag number." }
     ```
   * If a valid tag was specified without a value, you will receive the error:
     ```json
-    {"code": -1177, "msg": "Tag specified without a value."}
+    { "code": -1177, "msg": "Tag specified without a value." }
     ```
   * If the field value was empty or malformed, you will still receive the error:
     ```json
-    {"code": -1102, "msg": "Field value was empty or malformed."}
+    { "code": -1102, "msg": "Field value was empty or malformed." }
     ```
 ---
 

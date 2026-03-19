@@ -107,33 +107,33 @@ Status | Description
 * REQUEST_WEIGHT
 
 ```json
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000
-    }
+{
+    "rateLimitType": "REQUEST_WEIGHT",
+    "interval": "MINUTE",
+    "intervalNum": 1,
+    "limit": 6000
+}
 ```
 
 * ORDERS
 
 ```json
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 1,
-      "limit": 10
-    }
+{
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 1,
+    "limit": 10
+}
 ```
 * RAW_REQUESTS
 
 ```json
-    {
-      "rateLimitType": "RAW_REQUESTS",
-      "interval": "MINUTE",
-      "intervalNum": 5,
-      "limit": 61000
-    }
+{
+    "rateLimitType": "RAW_REQUESTS",
+    "interval": "MINUTE",
+    "intervalNum": 5,
+    "limit": 61000
+}
 ```
 
 ## Rate limit intervals (interval)
@@ -154,3 +154,21 @@ Read [Self Trade Prevention (STP) FAQ](../faqs/stp_faq.md) to learn more.
 * `EXPIRE_BOTH`
 * `DECREMENT`
 * `TRANSFER`
+
+## Execution Types
+
+Status | Description
+-----------| --------------
+ `NEW`     | The order has been accepted into the engine.
+`CANCELED`  | The order has been canceled by the user.
+`REPLACED` |The order has been amended.
+`REJECTED` | The order has been rejected and was not processed. (e.g. Cancel Replace orders where the new order placement was rejected even if the cancel request succeeded.)
+`TRADE` |Part of the order or all of the order's quantity has filled.
+`EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
+`TRADE_PREVENTION` |The order has expired due to STP.
+
+<a id="execution rules"></a>
+
+## Execution Rules
+
+* `PRICE_RANGE`
